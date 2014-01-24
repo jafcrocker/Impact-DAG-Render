@@ -1,0 +1,53 @@
+{
+ "name": "Test DS",
+ "states": {
+      "availability": "DOWN",
+      "performance": "ACCEPTABLE",
+      "capacity": "ACCEPTABLE"
+  },
+ "children": [
+  {
+   "name": "Test LN",
+   "states": {
+      "availability": "UP",
+      "performance": "ACCEPTABLE",
+      "capacity": "ACCEPTABLE"
+   },
+   "children": [{
+   "name": "Test Child",
+   "states": {
+      "availability": "UP",
+      "performance": "ACCEPTABLE",
+      "capacity": "ACCEPTABLE"
+   },
+   "children": []
+  }]
+  },
+  {
+   "name": "localhost.localdomain",
+   "states": {
+      "availability": "DOWN",
+      "performance": "ACCEPTABLE",
+      "capacity": "ACCEPTABLE"
+   },
+   "children": [{
+   "name": "Test Child",
+   "states": {
+      "availability": "UP",
+      "performance": "ACCEPTABLE",
+      "capacity": "ACCEPTABLE"
+   },
+   "children": []
+  }]
+  },
+  {
+   "name": "impact425",
+   "states": {
+      "availability": "UP",
+      "performance": "ACCEPTABLE",
+      "capacity": "ACCEPTABLE"
+   },
+   "children": []
+  }
+ ]
+}
