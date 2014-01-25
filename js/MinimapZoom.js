@@ -25,7 +25,8 @@ function MinimapZoom() {
 
     function zoom(mainSVG, minimapSVG) {
         mainSVG.call(mainZoom).on("dblclick.zoom", null);
-        minimapSVG.call(minimapZoom);
+        if (minimapSVG != null)
+            minimapSVG.call(minimapZoom);
     }
 
     zoom.translate = function(_) { 
