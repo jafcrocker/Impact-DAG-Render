@@ -43,6 +43,79 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         refreshViewport();
     }
 
+
+    // A function that attaches mouse-click events to nodes to enable node selection
+    function setupEvents(){
+        var nodes = graphSVG.selectAll(".node");
+        var edges = graphSVG.selectAll(".edge");
+
+        // Set up node selection events
+        var select = Selectable().getrange(function(a, b) {
+            var path = getNodesBetween(a, b).concat(getNodesBetween(b, a));
+            return nodes.data(path, DAG.nodeid());
+        }).on("select", function() {
+                var selected = {};
+                graphSVG.selectAll(".node.selected").data().forEach(function(d) { selected[d.id]=true; });
+                edges.classed("selected", function(d) {
+                    return selected[d.source.id] && selected[d.target.id];
+                });
+                attachContextMenus();
+                DAGTooltip.hide();
+            });
+        select(nodes);
+
+        if (!lightweight) {
+            nodes.on("mouseover", function(d) {
+                graphSVG.classed("hovering", true);
+                highlightPath(d);
+            }).on("mouseout", function(d){
+                    graphSVG.classed("hovering", false);
+                    edges.classed("hovered", false).classed("immediate", false);
+                    nodes.classed("hovered", false).classed("immediate", false);
+                });
+        }
+
+        function highlightPath(center) {
+            var path = getEntirePathLinks(center);
+
+            var pathnodes = {};
+            var pathlinks = {};
+
+            path.forEach(function(p) {
+                pathnodes[p.source.id] = true;
+                pathnodes[p.target.id] = true;
+                pathlinks[p.source.id+p.target.id] = true;
+            });
+
+            edges.classed("hovered", function(d) {
+                return pathlinks[d.source.id+d.target.id];
+            })
+            nodes.classed("hovered", function(d) {
+                return pathnodes[d.id];
+            });
+
+            var immediatenodes = {};
+            var immediatelinks = {};
+            immediatenodes[center.id] = true;
+            center.getVisibleParents().forEach(function(p) {
+                immediatenodes[p.id] = true;
+                immediatelinks[p.id+center.id] = true;
+            })
+            center.getVisibleChildren().forEach(function(p) {
+                immediatenodes[p.id] = true;
+                immediatelinks[center.id+p.id] = true;
+            })
+
+            edges.classed("immediate", function(d) {
+                return immediatelinks[d.source.id+d.target.id];
+            })
+            nodes.classed("immediate", function(d) {
+                return immediatenodes[d.id];
+            })
+        }
+    }
+
+
     // The main draw function
     this.draw = function() {
         console.log("draw begin")
@@ -53,6 +126,12 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         start = (new Date()).getTime();
         minimapSVG.datum(graphSVG.node()).call(DAGMinimap);  // Draw a Minimap at the minimap attach
         console.log("draw minimap", new Date().getTime() - start);
+        start = (new Date()).getTime();
+        setupEvents();                      // Set up the node selection events
+        console.log("draw events", new Date().getTime() - start);
+        start = (new Date()).getTime();
+        refreshViewport();                  // Update the viewport settings
+        console.log("draw viewport", new Date().getTime() - start);
         console.log("draw complete, total time=", new Date().getTime() - begin);
     }
 
