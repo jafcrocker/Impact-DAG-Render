@@ -14,9 +14,6 @@
 
 </script>
 <script type="text/javascript" src="lib/d3/d3.v3.min.js"></script>
-<script type="text/javascript" src="lib/jQuery/jquery-1.9.0.js"></script>
-<script type="text/javascript" src="lib/jQuery/jquery.tipsy.js"></script>
-<script type="text/javascript" src="lib/jQuery/jquery.contextMenu.js"></script>
 <script type="text/javascript" src="lib/dagre/dagre.js"></script>
 <script type="text/javascript" src="js/Minimap.js"></script>
 <script type="text/javascript" src="js/MinimapZoom.js"></script>
@@ -25,10 +22,11 @@
 <script type="text/javascript" src="js/Selectable.js"></script>
 <script type="text/javascript" src="js/Graph.js"></script>
 <script type="text/javascript" src="js/History.js"></script>
-<script type="text/javascript" src="js/Tooltip.js"></script>
 <script type="text/javascript" src="js/ContextMenu.js"></script>
 <script type="text/javascript" src="js/xtrace_utils.js"></script>
 <script type="text/javascript" src="js/xtrace_graph.js"></script>
+<script type="text/javascript" src="js/impact_utils.js"></script>
+<script type="text/javascript" src="js/impact_graph.js"></script>
 <link href="stylesheets/xtrace.css" rel="stylesheet" type="text/css">
 <link href="stylesheets/tipsy.css" rel="stylesheet" type="text/css" />
 <link href="stylesheets/jquery.contextMenu.css" rel="stylesheet" type="text/css" />
@@ -39,7 +37,8 @@ window.onload = function() {
 	var callback = function(data) {
 		console.log("Reports received, accessible as window.data", data);
 		window.data = data;
-		window.xtrace = new XTraceDAG(document.body, data[0].reports, params);
+		//JAFC3 window.xtrace = new XTraceDAG(document.body, data[0].reports, params);
+        window.impact = new ImpactDAG(document.body, data, params);
 	};
 	var errback = function(message, error) {
 		console.log("Error retrieving reports", error);
@@ -47,7 +46,8 @@ window.onload = function() {
 	if (id==null) {
 	    document.body.appendChild(document.createTextNode("No Trace ID specified"));
     } else {
-        getReports(id, callback, errback);
+        //JAFC3 getReports(id, callback, errback);
+        getImpactServices(id, callback, errback);
     }
 }
 </script>
