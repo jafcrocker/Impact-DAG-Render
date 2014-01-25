@@ -1,0 +1,661 @@
+{
+  "rootNode": "5eb98ecd-b635-4727-a378-6db178c4c53b",
+  "nodes": {
+    "4b402273-acfe-4a70-bb61-c06c88524cc0": {
+      "name": "zenoss.com",
+      "meta_type": "LogicalNode",
+      "type": "ELEMENT",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "159b3eb2-0ba5-4c4b-a8a4-0bca06e2dfbe": {
+      "name": "fake-router",
+      "meta_type": "Device",
+      "type": "ELEMENT",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "bff9d774-9fe4-4c37-a190-88ef0802822d": {
+      "name": "Internet - Router",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "45e0a9e3-342e-4e72-93c4-ffd007e7f4b9": {
+      "name": "fake-switch",
+      "meta_type": "Device",
+      "type": "ELEMENT",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "03b66fb3-c37a-4fcc-9d4f-bf87f3517780": {
+      "name": "fake-app-server-nic-B",
+      "meta_type": "Device",
+      "type": "ELEMENT",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "1ae33b26-d799-4b01-9050-204eab21cb9f": {
+      "name": "Switch - App Server B",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "fb9257c0-0f54-42ad-ba3c-7928da3288d3": {
+      "name": "fake-app-server-nic-A",
+      "meta_type": "Device",
+      "type": "ELEMENT",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "67ad665f-3e06-4acb-8896-4657863502fb": {
+      "name": "Switch - App Server A",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "f5925f79-5d10-46ea-a5d9-c7e1adb99702": {
+      "name": "Switch - App Servers",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP",
+          "global_policy": true
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "3ecac071-117c-41bc-a011-a932e517eb85": {
+      "name": "fake-firewall",
+      "meta_type": "Device",
+      "type": "ELEMENT",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "c2a64628-5cd1-4cb1-a198-c5724a9fe532": {
+      "name": "Firewall - Switch",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "5cd67533-1485-4123-9f34-14a6c3453da5": {
+      "name": "Router - Firewall",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "3d1b6d48-afe6-433d-a2c3-856436eab55d": {
+      "name": "Router - App Servers",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "6dce528a-6e26-4dc1-a8b7-3b524c5050f3": {
+      "name": "fake-db-server-nic-B",
+      "meta_type": "Device",
+      "type": "ELEMENT",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "1ea5f3c8-f929-42cc-a3eb-0e0c6ca759d7": {
+      "name": "Switch - DB Server B",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "420ed3a0-893b-4fde-8f8f-3ec720a49006": {
+      "name": "fake-db-server-nic-A",
+      "meta_type": "Device",
+      "type": "ELEMENT",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "c19f05d8-62ef-4b21-8ced-48c8327ef553": {
+      "name": "Switch - DB Server A",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "bd18dad0-c3ad-4fc4-b15a-f3f5b63532b5": {
+      "name": "Switch - DB Servers",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP",
+          "global_policy": true
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "c4b222f7-554a-4186-a497-a26922fe0e22": {
+      "name": "CRM - Network",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "dd63926e-878e-4e4b-9563-4cf2ff2e7211": {
+      "name": "fake-app-server-B",
+      "meta_type": "Device",
+      "type": "ELEMENT",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "e7ce718f-e9ec-4082-b811-eafefa5d939b": {
+      "name": "fake-app-server-A",
+      "meta_type": "Device",
+      "type": "ELEMENT",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "782ebcf5-777f-42a0-9a28-78671e43e056": {
+      "name": "CRM - App Servers",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP",
+          "global_policy": true
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "2e75541f-1000-4505-a426-1794a2621764": {
+      "name": "fake-db-server-B",
+      "meta_type": "Device",
+      "type": "ELEMENT",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "011b9d5f-4973-4f2c-b933-399fd20babb8": {
+      "name": "fake-db-server-A",
+      "meta_type": "Device",
+      "type": "ELEMENT",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "7d8e0b7f-a4b3-4bd7-9ea4-2dc7eca69d0f": {
+      "name": "CRM - DB Servers",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP",
+          "global_policy": true
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE"
+        }
+      }
+    },
+    "5eb98ecd-b635-4727-a378-6db178c4c53b": {
+      "name": "CRM",
+      "meta_type": "DynamicService",
+      "type": "SERVICE",
+      "production": true,
+      "states": {
+        "AVAILABILITY": {
+          "state": "UP",
+          "context_state": "UP"
+        },
+        "PERFORMANCE": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        },
+        "CAPACITY": {
+          "state": "ACCEPTABLE",
+          "context_state": "ACCEPTABLE"
+        }
+      }
+    }
+  },
+  "edges": [
+    {
+      "id": "17512",
+      "from": "4b402273-acfe-4a70-bb61-c06c88524cc0",
+      "to": "bff9d774-9fe4-4c37-a190-88ef0802822d"
+    },
+    {
+      "id": "17511",
+      "from": "159b3eb2-0ba5-4c4b-a8a4-0bca06e2dfbe",
+      "to": "bff9d774-9fe4-4c37-a190-88ef0802822d"
+    },
+    {
+      "id": "17499",
+      "from": "159b3eb2-0ba5-4c4b-a8a4-0bca06e2dfbe",
+      "to": "5cd67533-1485-4123-9f34-14a6c3453da5"
+    },
+    {
+      "id": "17510",
+      "from": "bff9d774-9fe4-4c37-a190-88ef0802822d",
+      "to": "c4b222f7-554a-4186-a497-a26922fe0e22"
+    },
+    {
+      "id": "17509",
+      "from": "45e0a9e3-342e-4e72-93c4-ffd007e7f4b9",
+      "to": "1ae33b26-d799-4b01-9050-204eab21cb9f"
+    },
+    {
+      "id": "17506",
+      "from": "45e0a9e3-342e-4e72-93c4-ffd007e7f4b9",
+      "to": "67ad665f-3e06-4acb-8896-4657863502fb"
+    },
+    {
+      "id": "17502",
+      "from": "45e0a9e3-342e-4e72-93c4-ffd007e7f4b9",
+      "to": "c2a64628-5cd1-4cb1-a198-c5724a9fe532"
+    },
+    {
+      "id": "17495",
+      "from": "45e0a9e3-342e-4e72-93c4-ffd007e7f4b9",
+      "to": "1ea5f3c8-f929-42cc-a3eb-0e0c6ca759d7"
+    },
+    {
+      "id": "17492",
+      "from": "45e0a9e3-342e-4e72-93c4-ffd007e7f4b9",
+      "to": "c19f05d8-62ef-4b21-8ced-48c8327ef553"
+    },
+    {
+      "id": "17508",
+      "from": "03b66fb3-c37a-4fcc-9d4f-bf87f3517780",
+      "to": "1ae33b26-d799-4b01-9050-204eab21cb9f"
+    },
+    {
+      "id": "17507",
+      "from": "1ae33b26-d799-4b01-9050-204eab21cb9f",
+      "to": "f5925f79-5d10-46ea-a5d9-c7e1adb99702"
+    },
+    {
+      "id": "17505",
+      "from": "fb9257c0-0f54-42ad-ba3c-7928da3288d3",
+      "to": "67ad665f-3e06-4acb-8896-4657863502fb"
+    },
+    {
+      "id": "17504",
+      "from": "67ad665f-3e06-4acb-8896-4657863502fb",
+      "to": "f5925f79-5d10-46ea-a5d9-c7e1adb99702"
+    },
+    {
+      "id": "17503",
+      "from": "f5925f79-5d10-46ea-a5d9-c7e1adb99702",
+      "to": "3d1b6d48-afe6-433d-a2c3-856436eab55d"
+    },
+    {
+      "id": "17501",
+      "from": "3ecac071-117c-41bc-a011-a932e517eb85",
+      "to": "c2a64628-5cd1-4cb1-a198-c5724a9fe532"
+    },
+    {
+      "id": "17498",
+      "from": "3ecac071-117c-41bc-a011-a932e517eb85",
+      "to": "5cd67533-1485-4123-9f34-14a6c3453da5"
+    },
+    {
+      "id": "17500",
+      "from": "c2a64628-5cd1-4cb1-a198-c5724a9fe532",
+      "to": "3d1b6d48-afe6-433d-a2c3-856436eab55d"
+    },
+    {
+      "id": "17497",
+      "from": "5cd67533-1485-4123-9f34-14a6c3453da5",
+      "to": "3d1b6d48-afe6-433d-a2c3-856436eab55d"
+    },
+    {
+      "id": "17496",
+      "from": "3d1b6d48-afe6-433d-a2c3-856436eab55d",
+      "to": "c4b222f7-554a-4186-a497-a26922fe0e22"
+    },
+    {
+      "id": "17494",
+      "from": "6dce528a-6e26-4dc1-a8b7-3b524c5050f3",
+      "to": "1ea5f3c8-f929-42cc-a3eb-0e0c6ca759d7"
+    },
+    {
+      "id": "17493",
+      "from": "1ea5f3c8-f929-42cc-a3eb-0e0c6ca759d7",
+      "to": "bd18dad0-c3ad-4fc4-b15a-f3f5b63532b5"
+    },
+    {
+      "id": "17491",
+      "from": "420ed3a0-893b-4fde-8f8f-3ec720a49006",
+      "to": "c19f05d8-62ef-4b21-8ced-48c8327ef553"
+    },
+    {
+      "id": "17490",
+      "from": "c19f05d8-62ef-4b21-8ced-48c8327ef553",
+      "to": "bd18dad0-c3ad-4fc4-b15a-f3f5b63532b5"
+    },
+    {
+      "id": "17489",
+      "from": "bd18dad0-c3ad-4fc4-b15a-f3f5b63532b5",
+      "to": "c4b222f7-554a-4186-a497-a26922fe0e22"
+    },
+    {
+      "id": "17488",
+      "from": "c4b222f7-554a-4186-a497-a26922fe0e22",
+      "to": "5eb98ecd-b635-4727-a378-6db178c4c53b"
+    },
+    {
+      "id": "17486",
+      "from": "dd63926e-878e-4e4b-9563-4cf2ff2e7211",
+      "to": "782ebcf5-777f-42a0-9a28-78671e43e056"
+    },
+    {
+      "id": "17485",
+      "from": "e7ce718f-e9ec-4082-b811-eafefa5d939b",
+      "to": "782ebcf5-777f-42a0-9a28-78671e43e056"
+    },
+    {
+      "id": "17484",
+      "from": "782ebcf5-777f-42a0-9a28-78671e43e056",
+      "to": "5eb98ecd-b635-4727-a378-6db178c4c53b"
+    },
+    {
+      "id": "17482",
+      "from": "2e75541f-1000-4505-a426-1794a2621764",
+      "to": "7d8e0b7f-a4b3-4bd7-9ea4-2dc7eca69d0f"
+    },
+    {
+      "id": "17481",
+      "from": "011b9d5f-4973-4f2c-b933-399fd20babb8",
+      "to": "7d8e0b7f-a4b3-4bd7-9ea4-2dc7eca69d0f"
+    },
+    {
+      "id": "17480",
+      "from": "7d8e0b7f-a4b3-4bd7-9ea4-2dc7eca69d0f",
+      "to": "5eb98ecd-b635-4727-a378-6db178c4c53b"
+    }
+  ]
+}
