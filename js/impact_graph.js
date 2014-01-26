@@ -22,6 +22,7 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     var DAG = DirectedAcyclicGraph().animate(!lightweight);
     var DAGMinimap = DirectedAcyclicGraphMinimap(DAG).width("19.5%").height("19.5%").x("80%").y("80%");
     var DAGHistory = List().width("15%").height("99%").x("0.5%").y("0.5%");
+    var DAGTooltip = DirectedAcyclicGraphTooltip();
     var DAGContextMenu = DirectedAcyclicGraphContextMenu(graph, graphSVG);
 
     // Attach the panzoom behavior
@@ -113,6 +114,7 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
                     return selectme;
                 });
                 attachContextMenus();
+                DAGTooltip.hide();
             });
     }
 
@@ -139,6 +141,7 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
                     return selected[d.source.id] && selected[d.target.id];
                 });
                 attachContextMenus();
+                DAGTooltip.hide();
             });
         select(nodes);
 
@@ -220,11 +223,15 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         console.log("draw begin")
         var begin = (new Date()).getTime();
         var start = (new Date()).getTime();
+        DAGTooltip.hide();
         graphSVG.datum(graph).call(DAG);    // Draw a DAG at the graph attach
         console.log("draw graph", new Date().getTime() - start);
         start = (new Date()).getTime();
         minimapSVG.datum(graphSVG.node()).call(DAGMinimap);  // Draw a Minimap at the minimap attach
         console.log("draw minimap", new Date().getTime() - start);
+        start = (new Date()).getTime();
+        graphSVG.selectAll(".node").call(DAGTooltip);        // Attach tooltips
+        console.log("draw tooltips", new Date().getTime() - start);
         start = (new Date()).getTime();
         setupEvents();                      // Set up the node selection events
         console.log("draw events", new Date().getTime() - start);
@@ -249,9 +256,10 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     this.DAG = DAG;
     this.DAGMinimap = DAGMinimap;
     this.DAGHistory = DAGHistory;
+    this.DAGTooltip = DAGTooltip;
+    this.DAGContextMenu = DAGContextMenu;
     this.graph = graph;
     this.resetViewport = resetViewport;
-    this.DAGContextMenu = DAGContextMenu;
     this.history = history;
 
 }

@@ -125,7 +125,7 @@ function DirectedAcyclicGraph() {
         
         // Call dagre layout.  Store layout data such that calls to x(), y() and points() will return them
         start = new Date().getTime();
-        dagre.layout().nodeSep(20).edgeSep(5).rankSep(20).nodes(nodes_d).edges(edges_d).run(); 
+        dagre.layout().nodeSep(20).edgeSep(5).rankSep(50).nodes(nodes_d).edges(edges_d).run();
         console.log("layout:dagre", (new Date().getTime() - start));   
         
         // Also we want to make sure that the control points for all the edges overlap the nodes nicely

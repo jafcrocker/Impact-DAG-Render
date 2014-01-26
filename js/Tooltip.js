@@ -18,7 +18,7 @@ var timestampToTimeString = function(timestamp) {
 var DirectedAcyclicGraphTooltip = function(gravity) {
 
 	var tooltip = Tooltip(gravity).title(function(d) {
-		var report = d.report;
+		var impactNode = d.impact_node;
 
 		var reserved = ["Source", "Operation", "Agent", "Label", "Class", "Timestamp", "HRT", "Cycles", "Host", "ProcessID", "ThreadID", "ThreadName", "X-Trace"];
 
@@ -35,7 +35,7 @@ var DirectedAcyclicGraphTooltip = function(gravity) {
 		// Do the reserved first
 		for (var i = 0; i < reserved.length; i++) {
 			var key = reserved[i];
-			if (report.hasOwnProperty(key)) {
+			if (impactNode.hasOwnProperty(key)) {
 				seen[key] = true;
 				if (key=="Timestamp") {
 					appendRow(key, timestampToTimeString(report[key][0]), tooltip);
@@ -47,14 +47,17 @@ var DirectedAcyclicGraphTooltip = function(gravity) {
 		}
 
 		// Do the remainder
-		for (var key in report) {
+		for (var key in impactNode) {
 			if (!seen[key]) {
-				appendRow(key, report[key].join(", "), tooltip);
+                console.log(key);
+                console.log(impactNode[key]);
+
+                appendRow(key, impactNode[key], tooltip);
 			}
 		}
 
 		// Do the label
-		appendRow("(hash)", hash_report(report), tooltip);
+		appendRow("(hash)", hash_report(impactNode), tooltip);
 
 		return tooltip.outerHTML();
 	});
