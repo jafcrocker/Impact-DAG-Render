@@ -14,11 +14,14 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     var graphSVG = rootSVG.append("svg").attr("width", "100%").attr("height", "100%").attr("class", "graph-attach");
     graphSVG.node().oncontextmenu = function(d) { return false; };
     var minimapSVG = rootSVG.append("svg").attr("class", "minimap-attach");
+    var listSVG = rootSVG.append("svg").attr("class", "history-attach");
 
     var graph = createGraphFromImpacts(impact_doc, params);
+    var history = DirectedAcyclicGraphHistory();
 
     var DAG = DirectedAcyclicGraph().animate(!lightweight);
     var DAGMinimap = DirectedAcyclicGraphMinimap(DAG).width("19.5%").height("19.5%").x("80%").y("80%");
+    var DAGHistory = List().width("15%").height("99%").x("0.5%").y("0.5%");
     var DAGContextMenu = DirectedAcyclicGraphContextMenu(graph, graphSVG);
 
     // Attach the panzoom behavior
@@ -26,8 +29,13 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         var t = zoom.translate();
         var scale = zoom.scale();
         graphSVG.select(".graph").attr("transform","translate("+t[0]+","+t[1]+") scale("+scale+")");
-        minimapSVG.select('.viewfinder').attr("x", -t[0]/scale).attr("y", -t[1]/scale).attr("width", attachPoint.offsetWidth/scale).attr("height", attachPoint.offsetHeight/scale);
-        if (!lightweight) graphSVG.selectAll(".node text").attr("opacity", 3*scale-0.3);
+        minimapSVG.select('.viewfinder')
+            .attr("x", -t[0]/scale)
+            .attr("y", -t[1]/scale)
+            .attr("width", attachPoint.offsetWidth/scale)
+            .attr("height", attachPoint.offsetHeight/scale);
+        if (!lightweight)
+            graphSVG.selectAll(".node text").attr("opacity", 3*scale-0.3);
     }
     var zoom = MinimapZoom().scaleExtent([0.001, 2.0]).on("zoom", refreshViewport);
     zoom.call(this, rootSVG, minimapSVG);
@@ -57,7 +65,21 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
                     graphSVG.selectAll(".edge").classed("preview", false);
                 }
             }).on("hidenodes", function(nodes, selectionname) {
-                d3.select(this).remove();
+                var item = history.addSelection(nodes, selectionname);
+                if (!lightweight) graphSVG.classed("hovering", false);
+                listSVG.datum(history).call(DAGHistory);
+
+                // Find the point to animate the hidden nodes to
+                var bbox = DAGHistory.bbox().call(DAGHistory.select.call(listSVG.node(), item), item);
+                var transform = zoom.getTransform(bbox);
+                DAG.removenode(function(d) {
+                    if (lightweight) {
+                        d3.select(this).remove();
+                    } else {
+                        d3.select(this).classed("visible", false).transition().duration(800).attr("transform", transform).remove();
+                    }
+                });
+
                 dag.draw();
 
                 // Refresh selected edges
@@ -104,6 +126,7 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     function setupEvents(){
         var nodes = graphSVG.selectAll(".node");
         var edges = graphSVG.selectAll(".edge");
+        var items = listSVG.selectAll(".item");
 
         // Set up node selection events
         var select = Selectable().getrange(function(a, b) {
@@ -129,6 +152,27 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
                     nodes.classed("hovered", false).classed("immediate", false);
                 });
         }
+
+        // When a list item is clicked, it will be removed from the history and added to the graph
+        // So we override the DAG node transition behaviour so that the new nodes animate from the click position
+        items.on("click", function(d, i) {
+            // Remove the item from the history and redraw the history
+            history.remove(d);
+            listSVG.datum(history).call(DAGHistory);
+
+            // Now update the location that the new elements of the graph will enter from
+            var transform = zoom.getTransform(DAGHistory.bbox().call(this, d));
+            DAG.newnodetransition(function(d) {
+                if (DAG.animate()) {
+                    d3.select(this).attr("transform", transform).transition().duration(800).attr("transform", DAG.nodeTranslate);
+                } else {
+                    d3.select(this).attr("transform", transform).attr("transform", DAG.nodeTranslate);
+                }
+            })
+
+            // Redraw the graph and such
+            dag.draw();
+        })
 
         function highlightPath(center) {
             var path = getEntirePathLinks(center);
@@ -202,9 +246,12 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     // Save important variables
     this.attachPoint = attachPoint;
     this.impact_doc = impact_doc;
-    this.DAG = DAG
+    this.DAG = DAG;
+    this.DAGMinimap = DAGMinimap;
+    this.DAGHistory = DAGHistory;
     this.graph = graph;
     this.resetViewport = resetViewport;
     this.DAGContextMenu = DAGContextMenu;
+    this.history = history;
 
 }
