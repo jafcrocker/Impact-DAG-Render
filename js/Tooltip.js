@@ -49,9 +49,6 @@ var DirectedAcyclicGraphTooltip = function(gravity) {
 		// Do the remainder
 		for (var key in impactNode) {
 			if (!seen[key]) {
-                console.log(key);
-                console.log(impactNode[key]);
-
                 appendRow(key, impactNode[key], tooltip);
 			}
 		}
