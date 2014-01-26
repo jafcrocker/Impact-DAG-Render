@@ -19,6 +19,8 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
 
     var DAG = DirectedAcyclicGraph().animate(!lightweight);
     var DAGMinimap = DirectedAcyclicGraphMinimap(DAG).width("19.5%").height("19.5%").x("80%").y("80%");
+    var DAGContextMenu = DirectedAcyclicGraphContextMenu(graph, graphSVG);
+
     // Attach the panzoom behavior
     var refreshViewport = function() {
         var t = zoom.translate();
@@ -44,6 +46,60 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     }
 
 
+    // Attaches a context menu to any selected graph nodes
+    function attachContextMenus() {
+        DAGContextMenu.call(graphSVG.node(), graphSVG.selectAll(".node"));
+        DAGContextMenu.on("open", function() {
+            // JAFC3 DAGTooltip.hide();
+        }).on("close", function() {
+                if (!lightweight) {
+                    graphSVG.selectAll(".node").classed("preview", false);
+                    graphSVG.selectAll(".edge").classed("preview", false);
+                }
+            }).on("hidenodes", function(nodes, selectionname) {
+                d3.select(this).remove();
+                dag.draw();
+
+                // Refresh selected edges
+                var selected = {};
+                graphSVG.selectAll(".node.selected").data().forEach(function(d) { selected[d.id]=true; });
+                graphSVG.selectAll(".edge").classed("selected", function(d) {
+                    return selected[d.source.id] && selected[d.target.id];
+                });
+            }).on("hovernodes", function(nodes) {
+                if (!lightweight) {
+                    graphSVG.selectAll(".node").classed("preview", function(d) {
+                        return nodes.indexOf(d)!=-1;
+                    })
+                    var previewed = {};
+                    graphSVG.selectAll(".node.preview").data().forEach(function(d) { previewed[d.id]=true; });
+                    graphSVG.selectAll(".edge").classed("preview", function(d) {
+                        return previewed[d.source.id] && previewed[d.target.id];
+                    });
+                }
+            }).on("selectnodes", function(nodes) {
+                var selected = {};
+                nodes.forEach(function(d) { selected[d.id]=true; });
+                graphSVG.selectAll(".node").classed("selected", function(d) {
+                    var selectme = selected[d.id];
+                    if (d3.event.ctrlKey) selectme = selectme || d3.select(this).classed("selected");
+                    return selectme;
+                })
+                graphSVG.selectAll(".edge").classed("selected", function(d) {
+                    var selectme = selected[d.source.id] && selected[d.target.id];
+                    if (d3.event.ctrlKey) selectme = selectme || d3.select(this).classed("selected");
+                    return selectme;
+                });
+                attachContextMenus();
+            });
+    }
+
+    // Detaches any bound context menus
+    function detachContextMenus() {
+        $(".graph .node").unbind("contextmenu");
+    }
+
+
     // A function that attaches mouse-click events to nodes to enable node selection
     function setupEvents(){
         var nodes = graphSVG.selectAll(".node");
@@ -60,7 +116,6 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
                     return selected[d.source.id] && selected[d.target.id];
                 });
                 attachContextMenus();
-                DAGTooltip.hide();
             });
         select(nodes);
 
@@ -132,6 +187,9 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         start = (new Date()).getTime();
         refreshViewport();                  // Update the viewport settings
         console.log("draw viewport", new Date().getTime() - start);
+        start = (new Date()).getTime();
+        attachContextMenus();
+        console.log("draw contextmenus", new Date().getTime() - start);
         console.log("draw complete, total time=", new Date().getTime() - begin);
     }
 
@@ -147,4 +205,6 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     this.DAG = DAG
     this.graph = graph;
     this.resetViewport = resetViewport;
+    this.DAGContextMenu = DAGContextMenu;
+
 }
