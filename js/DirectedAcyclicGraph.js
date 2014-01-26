@@ -82,7 +82,7 @@ function DirectedAcyclicGraph() {
     }
     var drawnode = function(d) {
         // Attach the DOM elements
-        var rect = d3.select(this).append("rect");
+        var rect = d3.select(this).append("rect").attr("rx", 4);
         var text = d3.select(this).append("text").attr("text-anchor", "middle").attr("x", 0);
         //JAFC3 text.append("tspan").attr("x", 0).attr("dy", "1em").text(nodeid);
         text.append("tspan").attr("x", 0).attr("dy", "1.1em").text(nodename);
