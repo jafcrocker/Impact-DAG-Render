@@ -82,10 +82,13 @@ function DirectedAcyclicGraph() {
     }
     var drawnode = function(d) {
         // Attach the DOM elements
-        var rect = d3.select(this).append("rect").attr("rx", 4);
-        var text = d3.select(this).append("text").attr("text-anchor", "middle").attr("x", 0);
+        d3.select(this).append("rect").attr("rx", 4);
+        //JAFC3 var text = d3.select(this).append("text").attr("text-anchor", "middle").attr("x", 0);
+
+        d3.select(this).append("foreignObject").attr("class", "nodeRep")
+            .append("xhtml:div").html(nodename(d));
+
         //JAFC3 text.append("tspan").attr("x", 0).attr("dy", "1em").text(nodeid);
-        text.append("tspan").attr("x", 0).attr("dy", "1.1em").text(nodename);
         var prior_pos = nodepos.call(this, d);
         if (prior_pos!=null) {
             d3.select(this).attr("transform", graph.nodeTranslate);
@@ -94,11 +97,13 @@ function DirectedAcyclicGraph() {
     var sizenode = function(d) {
         // Because of SVG weirdness, call sizenode as necessary to ensure a node's size is correct
         var node_bbox = {"height": 50, "width": 200};
-        var rect = d3.select(this).select('rect'), text = d3.select(this).select('text');
-        var text_bbox = {"height": 40, "width": 190};
+        var rect = d3.select(this).select('rect');
+        var text = d3.select(this).select(".nodeRep");
+
         rect.attr("x", -node_bbox.width/2).attr("y", -node_bbox.height/2)
         rect.attr("width", node_bbox.width).attr("height", node_bbox.height);
-        text.attr("x", -text_bbox.width/2).attr("y", -text_bbox.height/2);
+        text.attr("x", -node_bbox.width/2).attr("y", -node_bbox.height/2);
+        text.attr("width", node_bbox.width).attr("height", node_bbox.height);
     }
     var removenode = function(d) {
         if (animate) {
