@@ -11,6 +11,7 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     var lightweight = params.lightweight ? true : false;
 
     var rootSVG = d3.select(attachPoint).append("svg");
+
     var graphSVG = rootSVG.append("svg").attr("width", "100%").attr("height", "100%").attr("class", "graph-attach");
     graphSVG.node().oncontextmenu = function(d) { return false; };
     var minimapSVG = rootSVG.append("svg").attr("class", "minimap-attach");
@@ -20,6 +21,8 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     var history = DirectedAcyclicGraphHistory();
 
     var DAG = DirectedAcyclicGraph().animate(!lightweight);
+    params.nodeTemplate ? DAG.nodeTemplate(params.nodeTemplate) : null;
+
     var DAGMinimap = DirectedAcyclicGraphMinimap(DAG).width("19.5%").height("19.5%").x("80%").y("80%");
     var DAGHistory = List().width("15%").height("99%").x("0.5%").y("0.5%");
     var DAGTooltip = DirectedAcyclicGraphTooltip();
@@ -208,12 +211,12 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
                 immediatelinks[center.id+p.id] = true;
             })
 
-            edges.classed("immediate", function(d) {
-                return immediatelinks[d.source.id+d.target.id];
-            })
-            nodes.classed("immediate", function(d) {
-                return immediatenodes[d.id];
-            })
+//            edges.classed("immediate", function(d) {
+//                return immediatelinks[d.source.id+d.target.id];
+//            })
+//            nodes.classed("immediate", function(d) {
+//                return immediatenodes[d.id];
+//            })
         }
     }
 

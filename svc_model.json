@@ -8,8 +8,8 @@
       "production": true,
       "states": {
         "AVAILABILITY": {
-          "state": "UP",
-          "context_state": "UP"
+          "state": "DOWN",
+          "context_state": "DOWN"
         },
         "PERFORMANCE": {
           "state": "ACCEPTABLE",

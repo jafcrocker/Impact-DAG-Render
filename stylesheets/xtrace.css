@@ -39,9 +39,15 @@
 }
 
 .graph .node rect {
-	fill: #FFF2CC;
-	stroke-width: 2px;
-	stroke: #A16D00;
+    fill: #EEE;
+    stroke-width: 2px;
+    stroke: #000000;
+}
+
+.graph .node rect.DOWN {
+    fill: #EEE;
+    stroke-width: 2px;
+    stroke: #A4011B;
 }
 
 .graph.animate .node rect {
@@ -65,10 +71,10 @@
 }
 
 .graph .edge {
-	fill: none;
-	stroke-width: 2.5px;
-	stroke: #D19D00;
-	opacity: 0;
+    fill: none;
+    stroke-width: 2.5px;
+    stroke: #000000;
+    opacity: 0;
 }
 
 .graph.animate .edge {

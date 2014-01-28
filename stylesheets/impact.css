@@ -1,0 +1,36 @@
+.nodeRepresentation{
+    padding: 2px 5px;
+}
+
+.nodeRepresentation h1{
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0px;
+    white-space: nowrap;
+}
+
+.nodeRepresentation .left{
+    float: left;
+}
+
+.nodeRepresentation .right{
+    float: right;
+    text-align: right;
+}
+
+.nodeRepresentation .icon{
+
+}
+
+.nodeRepresentation .icon img{
+    width: 40px;
+}
+
+.nodeRepresentation .state {
+    font-size: 12px;
+}
+
+.nodeRepresentation .actions{
+    font-size: 7px;
+}
