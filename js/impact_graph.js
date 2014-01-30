@@ -133,20 +133,18 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         var edges = graphSVG.selectAll(".edge");
         var items = listSVG.selectAll(".item");
 
-        // Set up node selection events
-        var select = Selectable().getrange(function(a, b) {
-            var path = getNodesBetween(a, b).concat(getNodesBetween(b, a));
-            return nodes.data(path, DAG.nodeid());
-        }).on("select", function() {
-                var selected = {};
-                graphSVG.selectAll(".node.selected").data().forEach(function(d) { selected[d.id]=true; });
-                edges.classed("selected", function(d) {
-                    return selected[d.source.id] && selected[d.target.id];
-                });
-                attachContextMenus();
-                DAGTooltip.hide();
+        nodes.on("click", function(d){
+            d3.select(this).data().forEach(function(d) { d.visible(false); });
+            DAG.removenode(function(d) {
+                if (lightweight) {
+                    d3.select(this).remove();
+                } else {
+                    d3.select(this).classed("visible", false).transition().duration(800).remove();
+                }
             });
-        select(nodes);
+            dag.draw();
+        });
+
 
         if (!lightweight) {
             nodes.on("mouseover", function(d) {
