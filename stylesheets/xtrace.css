@@ -44,12 +44,6 @@
     stroke: #000000;
 }
 
-.graph .node rect.DOWN {
-    fill: #EEE;
-    stroke-width: 2px;
-    stroke: #A4011B;
-}
-
 .graph.animate .node rect {
 	transition: fill 0.5s, stroke 0.5s, stroke-width 0.5s;
 	-webkit-transition: fill 0.5s, stroke 0.5s, stroke-width 0.5s;

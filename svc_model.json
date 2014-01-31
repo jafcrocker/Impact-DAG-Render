@@ -27,8 +27,8 @@
       "production": true,
       "states": {
         "AVAILABILITY": {
-          "state": "UP",
-          "context_state": "UP"
+          "state": "DEGRADED",
+          "context_state": "DEGRADED"
         },
         "PERFORMANCE": {
           "state": "ACCEPTABLE",
@@ -46,8 +46,8 @@
       "production": true,
       "states": {
         "AVAILABILITY": {
-          "state": "UP",
-          "context_state": "UP"
+          "state": "ATRISK",
+          "context_state": "ATRISK"
         },
         "PERFORMANCE": {
           "state": "ACCEPTABLE",
