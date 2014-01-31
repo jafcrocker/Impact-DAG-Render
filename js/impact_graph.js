@@ -135,11 +135,13 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
 
         nodes.on("click", function(d){
             values(d.child_nodes).forEach(function(n) {n.visible(false);})
+            parent = d;
             DAG.removenode(function(d) {
                 if (lightweight) {
                     d3.select(this).remove();
                 } else {
-                    d3.select(this).classed("visible", false).transition().duration(800).remove();
+                    var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)"
+                    d3.select(this).classed("visible", false).transition().attr("transform", transform).duration(800).remove();
                 }
             });
             dag.draw();
