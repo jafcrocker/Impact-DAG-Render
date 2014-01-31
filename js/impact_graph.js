@@ -134,7 +134,7 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         var items = listSVG.selectAll(".item");
 
         nodes.on("click", function(d){
-            d3.select(this).data().forEach(function(d) { d.visible(false); });
+            values(d.child_nodes).forEach(function(n) {n.visible(false);})
             DAG.removenode(function(d) {
                 if (lightweight) {
                     d3.select(this).remove();
@@ -144,7 +144,6 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
             });
             dag.draw();
         });
-
 
         if (!lightweight) {
             nodes.on("mouseover", function(d) {
