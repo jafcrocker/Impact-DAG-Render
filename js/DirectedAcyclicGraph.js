@@ -73,7 +73,6 @@ function DirectedAcyclicGraph() {
     var height = d3.functor("100%");
     var edgeid = function(d) { return d.source.id + d.target.id; }
     var nodeid = function(d) { return d.id; }
-//    var nodename = function(d) { return d.report["Agent"] ? d.report["Agent"][0] : ""; }
     var nodeTemplate = "{name}";
     var applyTemplate = function(d) {
         var nodeRepresentation = graph.nodeTemplate();
@@ -89,13 +88,13 @@ function DirectedAcyclicGraph() {
     }
     var drawnode = function(d) {
         // Attach the DOM elements
-        d3.select(this).append("rect").attr("rx", 4).attr("class", d.impact_node.states.AVAILABILITY.state);
-        //JAFC3 var text = d3.select(this).append("text").attr("text-anchor", "middle").attr("x", 0);
+        d3.select(this).attr("class", d3.select(this).attr("class") + " " + d.impact_node.states.AVAILABILITY.state);
+
+        d3.select(this).append("rect").attr("rx", 4);
 
         d3.select(this).append("foreignObject").attr("class", "nodeRep")
             .append("xhtml:div").attr("class", "nodeRepresentation").html(applyTemplate(d));
 
-        //JAFC3 text.append("tspan").attr("x", 0).attr("dy", "1em").text(nodeid);
         var prior_pos = nodepos.call(this, d);
         if (prior_pos!=null) {
             d3.select(this).attr("transform", graph.nodeTranslate);

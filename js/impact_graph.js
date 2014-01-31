@@ -12,6 +12,11 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
 
     var rootSVG = d3.select(attachPoint).append("svg");
 
+    // Set up graphics we will need to for rendering the graph
+    var rootDefs = rootSVG.append("defs");
+    rootDefs.append("circle").attr("id", "statusCircle").attr("cx", "10").attr("cy", "15").attr("r", "8");
+    rootDefs.append("polygon").attr("id", "statusArrow").attr("points", "10,5 20,15 15,15 15,25 5,25 5,15 0,15");
+
     var graphSVG = rootSVG.append("svg").attr("width", "100%").attr("height", "100%").attr("class", "graph-attach");
     graphSVG.node().oncontextmenu = function(d) { return false; };
     var minimapSVG = rootSVG.append("svg").attr("class", "minimap-attach");
@@ -20,6 +25,7 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     var graph = createGraphFromImpacts(impact_doc, params);
     var history = DirectedAcyclicGraphHistory();
 
+    // Create graph object and modify behavior
     var DAG = DirectedAcyclicGraph().animate(!lightweight);
     params.nodeTemplate ? DAG.nodeTemplate(params.nodeTemplate) : null;
 

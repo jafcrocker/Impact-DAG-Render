@@ -17,6 +17,7 @@
 .nodeRepresentation .right{
     float: right;
     text-align: right;
+    width: 20px;
 }
 
 .nodeRepresentation .icon{
@@ -35,14 +36,35 @@
     font-size: 7px;
 }
 
-.graph .node rect.DOWN, .graph .node rect.UNACCEPTABLE {
+.node.DOWN rect, .node.UNACCEPTABLE rect{
     stroke: #A4011B;
 }
 
-.graph .node rect.DEGRADED {
+.node.DEGRADED rect{
     stroke: #CF5300;
 }
 
-.graph .node rect.ATRISK {
+.node.ATRISK rect{
     stroke: #FCD116;
+}
+
+.node .state svg{
+    stroke-width: 1;
+    stroke: black;
+}
+
+.node.UP .state svg{
+    fill: green;
+}
+
+.node.DOWN .state svg, .node.UNACCEPTABLE .state svg{
+    fill: #A4011B;
+}
+
+.node.DEGRADED .state svg{
+    fill: #CF5300;
+}
+
+.node.ATRISK .state svg{
+    fill: #FCD116;
 }
