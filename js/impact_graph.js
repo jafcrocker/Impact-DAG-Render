@@ -135,7 +135,7 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
 
         nodes.on("click", function(d){
             values(d.child_nodes).forEach(function(n) {n.visible(false);})
-            parent = d;
+            var parent = d;
             DAG.removenode(function(d) {
                 if (lightweight) {
                     d3.select(this).remove();
