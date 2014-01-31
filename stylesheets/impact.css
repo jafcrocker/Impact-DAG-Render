@@ -34,3 +34,15 @@
 .nodeRepresentation .actions{
     font-size: 7px;
 }
+
+.graph .node rect.DOWN, .graph .node rect.UNACCEPTABLE {
+    stroke: #A4011B;
+}
+
+.graph .node rect.DEGRADED {
+    stroke: #CF5300;
+}
+
+.graph .node rect.ATRISK {
+    stroke: #FCD116;
+}
