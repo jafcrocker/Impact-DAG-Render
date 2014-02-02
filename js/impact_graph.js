@@ -134,16 +134,28 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         var items = listSVG.selectAll(".item");
 
         nodes.on("click", function(d){
-            values(d.child_nodes).forEach(function(n) {n.visible(false);})
+            d.hidingDescendants = !d.hidingDescendants;
+            updateDescendantVisibility(d);
+
             var parent = d;
             DAG.removenode(function(d) {
                 if (lightweight) {
                     d3.select(this).remove();
                 } else {
-                    var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)"
+                    var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)";
                     d3.select(this).classed("visible", false).transition().attr("transform", transform).duration(800).remove();
                 }
             });
+
+            var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)";
+            DAG.newnodetransition(function(d) {
+                if (DAG.animate()) {
+                    d3.select(this).attr("transform", transform).transition().duration(800).attr("transform", DAG.nodeTranslate);
+                } else {
+                    d3.select(this).attr("transform", transform).attr("transform", DAG.nodeTranslate);
+                }
+            })
+
             dag.draw();
         });
 

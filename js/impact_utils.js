@@ -46,3 +46,24 @@ var createGraphFromImpacts = function(impact_doc, params) {
     console.log("Done creating graph from reports");
     return graph;
 }
+
+
+var updateDescendantVisibility = function(node) {
+    var updateChildren = function(node) {
+        var isVisible = false;
+        var hidingParents = {};
+
+        node.getParents().forEach(function (p) {
+            if (p.visible() && !p.hidingDescendants)
+                isVisible = true;
+            if (p['hidingDescendants'])
+                hidingParents[p] = true;
+        });
+
+        node.visible(isVisible);
+
+        node.getChildren().forEach(updateChildren);
+    }
+
+    node.getChildren().forEach(updateChildren);
+}
