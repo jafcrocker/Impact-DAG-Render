@@ -246,6 +246,7 @@ function DirectedAcyclicGraph() {
     graph.nodepos = function(_) { if (!arguments.length) return nodepos; nodepos = _; return graph; }
     graph.edgepos = function(_) { if (!arguments.length) return edgepos; edgepos = _; return graph; }
     graph.animate = function(_) { if (!arguments.length) return animate; animate = _; return graph; }
-    
+    graph.getedges = function(_) { if (!arguments.length) return getedges; getedges = _; return graph;}
+
     return graph;
 }

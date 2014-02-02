@@ -20,7 +20,14 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     var graph = createGraphFromImpacts(impact_doc, params);
     var history = DirectedAcyclicGraphHistory();
 
-    var DAG = DirectedAcyclicGraph().animate(!lightweight);
+    var DAG = DirectedAcyclicGraph().animate(!lightweight).getedges(function (d) {
+        var edges = [];
+        d.getVisibleLinks().forEach(function (e) {
+            if (! e.source.hidingDescendants)
+                edges.push(e);
+        });
+        return edges;
+    });
     params.nodeTemplate ? DAG.nodeTemplate(params.nodeTemplate) : null;
 
     var DAGMinimap = DirectedAcyclicGraphMinimap(DAG).width("19.5%").height("19.5%").x("80%").y("80%");
