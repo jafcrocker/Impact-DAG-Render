@@ -164,6 +164,10 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
             })
 
             dag.draw();
+
+            graphSVG.classed("hovering", false);
+            edges.classed("hovered", false).classed("immediate", false);
+            nodes.classed("hovered", false).classed("immediate", false);
         });
 
         if (!lightweight) {
