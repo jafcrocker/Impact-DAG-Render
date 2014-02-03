@@ -25,8 +25,14 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     var graph = createGraphFromImpacts(impact_doc, params);
     var history = DirectedAcyclicGraphHistory();
 
-    // Create graph object and modify behavior
-    var DAG = DirectedAcyclicGraph().animate(!lightweight);
+    var DAG = DirectedAcyclicGraph().animate(!lightweight).getedges(function (d) {
+        var edges = [];
+        d.getVisibleLinks().forEach(function (e) {
+            if (! e.source.hidingDescendants)
+                edges.push(e);
+        });
+        return edges;
+    });
     params.nodeTemplate ? DAG.nodeTemplate(params.nodeTemplate) : null;
 
     var DAGMinimap = DirectedAcyclicGraphMinimap(DAG).width("19.5%").height("19.5%").x("80%").y("80%");
@@ -139,20 +145,35 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         var edges = graphSVG.selectAll(".edge");
         var items = listSVG.selectAll(".item");
 
-        // Set up node selection events
-        var select = Selectable().getrange(function(a, b) {
-            var path = getNodesBetween(a, b).concat(getNodesBetween(b, a));
-            return nodes.data(path, DAG.nodeid());
-        }).on("select", function() {
-                var selected = {};
-                graphSVG.selectAll(".node.selected").data().forEach(function(d) { selected[d.id]=true; });
-                edges.classed("selected", function(d) {
-                    return selected[d.source.id] && selected[d.target.id];
-                });
-                attachContextMenus();
-                DAGTooltip.hide();
+        nodes.on("click", function(d){
+            d.hidingDescendants = !d.hidingDescendants;
+            updateDescendantVisibility(d);
+
+            var parent = d;
+            DAG.removenode(function(d) {
+                if (lightweight) {
+                    d3.select(this).remove();
+                } else {
+                    var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)";
+                    d3.select(this).classed("visible", false).transition().attr("transform", transform).duration(800).remove();
+                }
             });
-        select(nodes);
+
+            var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)";
+            DAG.newnodetransition(function(d) {
+                if (DAG.animate()) {
+                    d3.select(this).attr("transform", transform).transition().duration(800).attr("transform", DAG.nodeTranslate);
+                } else {
+                    d3.select(this).attr("transform", transform).attr("transform", DAG.nodeTranslate);
+                }
+            })
+
+            dag.draw();
+
+            graphSVG.classed("hovering", false);
+            edges.classed("hovered", false).classed("immediate", false);
+            nodes.classed("hovered", false).classed("immediate", false);
+        });
 
         if (!lightweight) {
             nodes.on("mouseover", function(d) {

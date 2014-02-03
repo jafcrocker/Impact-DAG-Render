@@ -33,7 +33,6 @@ function DirectedAcyclicGraph() {
             // Draw new nodes
             new_nodes.each(drawnode);
             existing_nodes.each(sizenode);
-            removed_nodes.each(removenode);
             if (animate) {
                 removed_edges.classed("visible", false).transition().duration(500).remove();
             } else {
@@ -44,7 +43,10 @@ function DirectedAcyclicGraph() {
             existing_nodes.classed("pre-existing", true);
             layout.call(svg.select(".graph").node(), nodes, edges);
             existing_nodes.classed("pre-existing", false);
-            
+
+            // Remove nodes after layout, allowing for access to post layout positions for other nodes
+            removed_nodes.each(removenode);
+
             // Animate into new positions
             if (animate) {
                 svg.select(".graph").selectAll(".edge.visible").transition().duration(800).attrTween("d", graph.edgeTween);//attr("d", graph.splineGenerator);
@@ -243,6 +245,7 @@ function DirectedAcyclicGraph() {
     graph.nodepos = function(_) { if (!arguments.length) return nodepos; nodepos = _; return graph; }
     graph.edgepos = function(_) { if (!arguments.length) return edgepos; edgepos = _; return graph; }
     graph.animate = function(_) { if (!arguments.length) return animate; animate = _; return graph; }
-    
+    graph.getedges = function(_) { if (!arguments.length) return getedges; getedges = _; return graph;}
+
     return graph;
 }

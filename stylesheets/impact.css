@@ -35,36 +35,3 @@
 .nodeRepresentation .actions{
     font-size: 7px;
 }
-
-.node.DOWN rect, .node.UNACCEPTABLE rect{
-    stroke: #A4011B;
-}
-
-.node.DEGRADED rect{
-    stroke: #CF5300;
-}
-
-.node.ATRISK rect{
-    stroke: #FCD116;
-}
-
-.node .state svg{
-    stroke-width: 1;
-    stroke: black;
-}
-
-.node.UP .state svg{
-    fill: green;
-}
-
-.node.DOWN .state svg, .node.UNACCEPTABLE .state svg{
-    fill: #A4011B;
-}
-
-.node.DEGRADED .state svg{
-    fill: #CF5300;
-}
-
-.node.ATRISK .state svg{
-    fill: #FCD116;
-}
