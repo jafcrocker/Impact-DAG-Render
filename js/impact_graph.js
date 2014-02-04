@@ -10,7 +10,7 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     // Get the necessary parameters
     var lightweight = params.lightweight ? true : false;
 
-    var rootSVG = d3.select(attachPoint).append("svg");
+    var rootSVG = d3.select(attachPoint).append("svg").attr("class", "graph-viewport");
 
     // Set up graphics we will need to for rendering the graph
     var rootDefs = rootSVG.append("defs");
