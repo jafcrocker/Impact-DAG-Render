@@ -23,7 +23,8 @@ function DirectedAcyclicGraph() {
             // Get the existing nodes and edges, and recalculate the node size
             var existing_edges = svg.select(".graph").selectAll(".edge").data(edges, edgeid);
             var existing_nodes = svg.select(".graph").selectAll(".node").data(nodes, nodeid);
-            
+            existing_nodes.each(updatenode);
+
             var removed_edges = existing_edges.exit();
             var removed_nodes = existing_nodes.exit();
             
@@ -90,26 +91,47 @@ function DirectedAcyclicGraph() {
     }
     var drawnode = function(d) {
         // Attach the DOM elements
-        d3.select(this).attr("class", d3.select(this).attr("class") + " " + d.impact_node.states.AVAILABILITY.state);
+        d3.select(this).attr("state", d.impact_node.states.AVAILABILITY.state);
 
+        // Attach box
         d3.select(this).append("rect").attr("rx", 4);
 
+        // Attach HTML body
         d3.select(this).append("foreignObject").attr("class", "nodeRep")
             .append("xhtml:div").attr("class", "nodeRepresentation").html(applyTemplate(d));
+
+        // Attach stub if this has incoming edges
+        if(Object.keys(d.child_nodes).length > 0){
+            d3.select(this).append("line");
+        }
+
+        // Attach collapse marker if the node has hidden children
+        if(d.hidingDescendants){
+            d3.select(this).append("line").attr("class", "collapse");
+        }
 
         var prior_pos = nodepos.call(this, d);
         if (prior_pos!=null) {
             d3.select(this).attr("transform", graph.nodeTranslate);
         }
-    }    
+    }
+    var updatenode = function(d){
+        // Attach the DOM elements
+        d3.select(this).attr("state", d.impact_node.states.AVAILABILITY.state);
+        d3.select(this).select(".nodeRepresentation").html(applyTemplate(d));
+    }
     var sizenode = function(d) {
         // Because of SVG weirdness, call sizenode as necessary to ensure a node's size is correct
-        var node_bbox = {"height": 50, "width": 85};
+        var node_bbox = {"height": 60, "width": 85};
         var rect = d3.select(this).select('rect');
+        var line = d3.select(this).select('line');
+        var collapseMarker = d3.select(this).select(".collapse");
         var text = d3.select(this).select(".nodeRep");
 
         rect.attr("x", -node_bbox.width/2).attr("y", -node_bbox.height/2)
         rect.attr("width", node_bbox.width).attr("height", node_bbox.height);
+        line.attr("x1", 0).attr("y1", node_bbox.height/2).attr("x2", -0).attr("y2", node_bbox.height/2 + 7);
+        collapseMarker.attr("x1", -20).attr("y1", 45).attr("x2", 20).attr("y2", 45);
         text.attr("x", -node_bbox.width/2).attr("y", -node_bbox.height/2);
         text.attr("width", node_bbox.width).attr("height", node_bbox.height);
     }
@@ -239,6 +261,7 @@ function DirectedAcyclicGraph() {
     graph.bbox = function(_) { if (!arguments.length) return bbox; bbox = d3.functor(_); return graph; }
     graph.nodeTemplate = function(_) { if (!arguments.length) return nodeTemplate; nodeTemplate = _; return graph; }
     graph.drawnode = function(_) { if (!arguments.length) return drawnode; drawnode = _; return graph; }
+    graph.updatenode = function(_) { if (!arguments.length) return updatenode; updatenode = _; return graph; }
     graph.removenode = function(_) { if (!arguments.length) return removenode; removenode = _; return graph; }
     graph.newnodetransition = function(_) { if (!arguments.length) return newnodetransition; newnodetransition = _; return graph; }
     graph.layout = function(_) { if (!arguments.length) return layout; layout = _; return graph; }

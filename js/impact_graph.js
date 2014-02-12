@@ -146,10 +146,17 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         var items = listSVG.selectAll(".item");
 
         nodes.on("click", function(d){
-            d.hidingDescendants = !d.hidingDescendants;
-            updateDescendantVisibility(d);
-
             var parent = d;
+            parent.hidingDescendants = !parent.hidingDescendants;
+
+            if(parent.hidingDescendants){
+                d3.select(this).append("line").attr("class", "collapse");
+            }else{
+                d3.select(this).select(".collapse").remove();
+            }
+
+            updateDescendantVisibility(parent);
+
             DAG.removenode(function(d) {
                 if (lightweight) {
                     d3.select(this).remove();
@@ -166,7 +173,7 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
                 } else {
                     d3.select(this).attr("transform", transform).attr("transform", DAG.nodeTranslate);
                 }
-            })
+            });
 
             dag.draw();
 

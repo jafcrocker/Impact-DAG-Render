@@ -13,6 +13,8 @@
     text-align: center;
     margin: 0px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .nodeRepresentation .left{
@@ -40,15 +42,20 @@
 .nodeRepresentation .actions{
     font-size: 7px;
 }
-.node.DOWN rect, .node.UNACCEPTABLE rect{
+
+.node{
+    fill: white;
+}
+
+.node[state=DOWN] rect, .node[state=UNACCEPTABLE] rect{
     stroke: #A4011B;
 }
 
-.node.DEGRADED rect{
+.node[state=DEGRADED] rect{
     stroke: #CF5300;
 }
 
-.node.ATRISK rect{
+.node[state=ATRISK] rect{
     stroke: #FCD116;
 }
 
@@ -57,18 +64,29 @@
     stroke: black;
 }
 
-.node.UP .state svg{
+.node[state=UP] .state svg{
     fill: green;
 }
 
-.node.DOWN .state svg, .node.UNACCEPTABLE .state svg{
+.node[state=DOWN] .state svg, .node[state=UNACCEPTABLE] .state svg{
     fill: #A4011B;
 }
 
-.node.DEGRADED .state svg{
+.node[state=DEGRADED] .state svg{
     fill: #CF5300;
 }
 
-.node.ATRISK .state svg{
+.node[state=ATRISK] .state svg{
     fill: #FCD116;
+}
+
+.node line{
+    stroke: black;
+    stroke-width: 3px;
+}
+
+.node line.collapse{
+    stroke: blue;
+    stroke-width: 5px;
+    stroke-dasharray: 5,10;
 }
