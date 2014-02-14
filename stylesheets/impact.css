@@ -11,7 +11,7 @@
     font-size: 10px;
     font-weight: bold;
     text-align: center;
-    margin: 0px;
+    margin: 0px 0px 5px 0px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -24,7 +24,7 @@
 .nodeRepresentation .right{
     float: right;
     text-align: right;
-    width: 20px;
+    width: 30px;
 }
 
 .nodeRepresentation .icon{
@@ -36,15 +36,16 @@
 }
 
 .nodeRepresentation .state {
+    margin-top: 3px;
+    background: #EEE url("/stateSprite.png") no-repeat;
+    background-size: cover;
+    height: 30px;
+    width: 29px;
     font-size: 12px;
 }
 
-.nodeRepresentation .actions{
-    font-size: 7px;
-}
-
 .node{
-    fill: white;
+    fill: #CCC;
 }
 
 .node[state=DOWN] rect, .node[state=UNACCEPTABLE] rect{
@@ -59,25 +60,20 @@
     stroke: #FCD116;
 }
 
-.node .state svg{
-    stroke-width: 1;
-    stroke: black;
+.node[state=UP] .state{
+    background-position: right;
 }
 
-.node[state=UP] .state svg{
-    fill: green;
+.node[state=DOWN] .state{
+    background-position: left;
 }
 
-.node[state=DOWN] .state svg, .node[state=UNACCEPTABLE] .state svg{
-    fill: #A4011B;
+.node[state=DEGRADED] .state{
+    background-position: -31;
 }
 
-.node[state=DEGRADED] .state svg{
-    fill: #CF5300;
-}
-
-.node[state=ATRISK] .state svg{
-    fill: #FCD116;
+.node[state=ATRISK] .state{
+    background-position: -61;
 }
 
 .node line{

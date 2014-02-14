@@ -102,11 +102,6 @@ function DirectedAcyclicGraph() {
         d3.select(this).append("foreignObject").attr("class", "nodeRep")
             .append("xhtml:div").attr("class", "nodeRepresentation").html(applyTemplate(d));
 
-        // Attach stub if this has incoming edges
-        if(Object.keys(d.child_nodes).length > 0){
-            d3.select(this).append("line");
-        }
-
         // Attach collapse marker if the node has hidden children
         if(d.hidingDescendants){
             d3.select(this).append("line").attr("class", "collapse");
@@ -170,6 +165,7 @@ function DirectedAcyclicGraph() {
             var p = d.dagre.points;
             p.push(dagre.util.intersectRect(d.target.dagre, p.length > 0 ? p[p.length - 1] : d.source.dagre));
             p.splice(0, 0, dagre.util.intersectRect(d.source.dagre, p[0]));
+            p.splice(1, 0, {x: p[0].x, y: p[0].y+15});
             p[0].y -= 0.5; p[p.length-1].y += 0.5;
         });
         

@@ -14,9 +14,6 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
 
     // Set up graphics we will need to for rendering the graph
     var rootDefs = rootSVG.append("defs");
-    rootDefs.append("circle").attr("id", "statusCircle").attr("cx", "10").attr("cy", "15").attr("r", "8");
-    rootDefs.append("polygon").attr("id", "statusArrow").attr("points", "10,5 20,15 15,15 15,25 5,25 5,15 0,15");
-
     var graphSVG = rootSVG.append("svg").attr("width", "100%").attr("height", "100%").attr("class", "graph-attach");
     graphSVG.node().oncontextmenu = function(d) { return false; };
     var minimapSVG = rootSVG.append("svg").attr("class", "minimap-attach");
@@ -36,6 +33,12 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     var DAGMinimap = DirectedAcyclicGraphMinimap(DAG).width("19.5%").height("19.5%").x("80%").y("80%");
     var DAGTooltip = DirectedAcyclicGraphTooltip();
     var nodeContextMenu = ImpactNodeContextMenu();
+
+    // Update function
+    var update = function(data){
+        graph = createGraphFromImpacts(data, params);
+        this.draw();
+    }
 
     // Attach the panzoom behavior
     var refreshViewport = function() {
@@ -220,4 +223,5 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     this.nodeContextMenu = nodeContextMenu;
     this.graph = graph;
     this.resetViewport = resetViewport;
+    this.update = update;
 }
