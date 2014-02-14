@@ -337,7 +337,7 @@ var ImpactNodeContextMenu = function() {
     }
     var onMenuClick = function(d) {
         if (d.operation=="toggleChildren") {
-            handlers.toggleChildren.call(this);
+            handlers.toggleChildren.call(this, d3.select(this).datum());
         }
     }
     var ctxmenu = ContextMenu()

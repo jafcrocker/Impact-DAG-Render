@@ -72,13 +72,47 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         nodeContextMenu.call(graphSVG.node(), graphSVG.selectAll(".node"));
         nodeContextMenu.on("open", function() {
             DAGTooltip.hide();
-        }).on("close", function() {
+            }).on("close", function() {
                 if (!lightweight) {
                     graphSVG.selectAll(".node").classed("preview", false);
                     graphSVG.selectAll(".edge").classed("preview", false);
                 }
-            }).on("toggleChildren", function() {
-                console.log("toggleChildren", this);
+            }).on("toggleChildren", function(d) {
+                console.log("toggleChildren", this, d);
+                var parent = d;
+                parent.hidingDescendants = !parent.hidingDescendants;
+
+                if(parent.hidingDescendants){
+                    d3.select(this).append("line").attr("class", "collapse");
+                }else{
+                    d3.select(this).select(".collapse").remove();
+                }
+
+                updateDescendantVisibility(parent);
+
+                DAG.removenode(function(d) {
+                    if (lightweight) {
+                        d3.select(this).remove();
+                    } else {
+                        var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)";
+                        d3.select(this).classed("visible", false).transition().attr("transform", transform).duration(800).remove();
+                    }
+                });
+
+                var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)";
+                DAG.newnodetransition(function(d) {
+                    if (DAG.animate()) {
+                        d3.select(this).attr("transform", transform).transition().duration(800).attr("transform", DAG.nodeTranslate);
+                    } else {
+                        d3.select(this).attr("transform", transform).attr("transform", DAG.nodeTranslate);
+                    }
+                });
+
+                dag.draw();
+
+                graphSVG.classed("hovering", false);
+                edges.classed("hovered", false).classed("immediate", false);
+                nodes.classed("hovered", false).classed("immediate", false);
             });
     }
 
@@ -92,43 +126,6 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     function setupEvents(){
         var nodes = graphSVG.selectAll(".node");
         var edges = graphSVG.selectAll(".edge");
-
-        nodes.on("click", function(d){
-            var parent = d;
-            parent.hidingDescendants = !parent.hidingDescendants;
-
-            if(parent.hidingDescendants){
-                d3.select(this).append("line").attr("class", "collapse");
-            }else{
-                d3.select(this).select(".collapse").remove();
-            }
-
-            updateDescendantVisibility(parent);
-
-            DAG.removenode(function(d) {
-                if (lightweight) {
-                    d3.select(this).remove();
-                } else {
-                    var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)";
-                    d3.select(this).classed("visible", false).transition().attr("transform", transform).duration(800).remove();
-                }
-            });
-
-            var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)";
-            DAG.newnodetransition(function(d) {
-                if (DAG.animate()) {
-                    d3.select(this).attr("transform", transform).transition().duration(800).attr("transform", DAG.nodeTranslate);
-                } else {
-                    d3.select(this).attr("transform", transform).attr("transform", DAG.nodeTranslate);
-                }
-            });
-
-            dag.draw();
-
-            graphSVG.classed("hovering", false);
-            edges.classed("hovered", false).classed("immediate", false);
-            nodes.classed("hovered", false).classed("immediate", false);
-        });
 
         if (!lightweight) {
             nodes.on("mouseover", function(d) {
