@@ -40,6 +40,10 @@ window.onload = function() {
     var params = getParameters();
     params.nodeTemplate = getNodeTemplate();
     var id = params["id"];
+    var refresh = function(){
+        window.impact.update(window.data);
+        setTimeout(refresh, 5000);
+    }
 	var callback = function(data) {
 		console.log("Reports received, accessible as window.data", data);
 		window.data = data;
@@ -47,6 +51,7 @@ window.onload = function() {
 
 		//JAFC3 window.xtrace = new XTraceDAG(document.body, data[0].reports, params);
         window.impact = graph;
+        setTimeout(refresh, 5000);
 	};
 	var errback = function(message, error) {
 		console.log("Error retrieving reports", error);
