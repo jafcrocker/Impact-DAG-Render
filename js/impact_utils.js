@@ -5,6 +5,21 @@
  * Time: 7:25 PM
  * To change this template use File | Settings | File Templates.
  */
+
+
+var getParameters = function() {
+    if (window.location.href.indexOf("?")==-1) return {};
+    var param_strs = window.location.href.substr(window.location.href.indexOf("?")+1).split("&");
+    var params = {};
+    param_strs.forEach(function(str) {
+        splits = str.split("=");
+        if (splits.length==2) {
+            params[splits[0]] = splits[1];
+        }
+    });
+    return params;
+};
+
 var getImpactServices = function(id, callback, errback) {
     d3.json(id, function(error, json) {
         if (error)
