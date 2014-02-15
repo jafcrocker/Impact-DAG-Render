@@ -80,6 +80,8 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
                     graphSVG.selectAll(".node").classed("preview", false);
                     graphSVG.selectAll(".edge").classed("preview", false);
                 }
+            }).on("editPolicies", function(d) { alert("TODO: edit policies...");
+            }).on("addChildren", function(d) { alert("TODO: add children...");
             }).on("toggleChildren", function(d) {
                 console.log("toggleChildren", this, d);
                 var parent = d;
@@ -114,6 +116,8 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
                 dag.draw();
 
                 graphSVG.classed("hovering", false);
+                var nodes = graphSVG.selectAll(".node");
+                var edges = graphSVG.selectAll(".edge");
                 edges.classed("hovered", false).classed("immediate", false);
                 nodes.classed("hovered", false).classed("immediate", false);
             });

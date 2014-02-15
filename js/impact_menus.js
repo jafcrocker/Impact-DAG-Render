@@ -9,7 +9,12 @@ var ImpactNodeContextMenu = function() {
     var onMenuClick = function(d) {
         if (d.operation=="toggleChildren") {
             handlers.toggleChildren.call(this, d3.select(this).datum());
+        } else if (d.operation== "editPolicies") {
+            handlers.editPolicies.call(this, d3.select(this).datum());
+        } else if (d.operation== "addChildren") {
+            handlers.editPolicies.call(this, d3.select(this).datum());
         }
+
     }
     var ctxmenu = ContextMenu()
         .on("open", onMenuOpen)
@@ -26,7 +31,14 @@ var ImpactNodeContextMenu = function() {
                 "operation": "toggleChildren",
                 "name": "Toggle Children"
             });
-
+            items.push({
+                "operation": "editPolicies",
+                "name": "Edit Impact Policies"
+            });
+            items.push({
+                "operation": "addChildren",
+                "name": "Add Children"
+            });
             ctxmenu.call(this, items);
             d3.select(this).classed("hascontextmenu", true);
         });
@@ -44,7 +56,9 @@ var ImpactNodeContextMenu = function() {
     var handlers = {
         "open": function() {},
         "close": function() {},
-        "toggleChildren": function() {}
+        "addChildren": function() {},
+        "toggleChildren": function() {},
+        "editPolicies": function() {}
     }
 
     menu.on = function(event, _) {
