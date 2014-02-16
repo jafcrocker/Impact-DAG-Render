@@ -71,6 +71,44 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         refreshViewport();
     }
 
+    function toggleChildren(d) {
+        var parent = d;
+        parent.hidingDescendants = !parent.hidingDescendants;
+
+        if(parent.hidingDescendants){
+            d3.select(this).append("line").attr("class", "collapse");
+        }else{
+            d3.select(this).select(".collapse").remove();
+        }
+
+        updateDescendantVisibility(parent);
+
+        DAG.removenode(function(d) {
+            if (lightweight) {
+                d3.select(this).remove();
+            } else {
+                var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)";
+                d3.select(this).classed("visible", false).transition().attr("transform", transform).duration(800).remove();
+            }
+        });
+
+        var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)";
+        DAG.newnodetransition(function(d) {
+            if (DAG.animate()) {
+                d3.select(this).attr("transform", transform).transition().duration(800).attr("transform", DAG.nodeTranslate);
+            } else {
+                d3.select(this).attr("transform", transform).attr("transform", DAG.nodeTranslate);
+            }
+        });
+
+        dag.draw();
+
+        graphSVG.classed("hovering", false);
+        var nodes = graphSVG.selectAll(".node");
+        var edges = graphSVG.selectAll(".edge");
+        edges.classed("hovered", false).classed("immediate", false);
+        nodes.classed("hovered", false).classed("immediate", false);
+    }
 
     // Attaches a context menu to any selected graph nodes
     function attachContextMenus() {
@@ -84,45 +122,7 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
                 }
             }).on("editPolicies", function(d) { alert("TODO: edit policies...");
             }).on("addChildren", function(d) { alert("TODO: add children...");
-            }).on("toggleChildren", function(d) {
-                console.log("toggleChildren", this, d);
-                var parent = d;
-                parent.hidingDescendants = !parent.hidingDescendants;
-
-                if(parent.hidingDescendants){
-                    d3.select(this).append("line").attr("class", "collapse");
-                }else{
-                    d3.select(this).select(".collapse").remove();
-                }
-
-                updateDescendantVisibility(parent);
-
-                DAG.removenode(function(d) {
-                    if (lightweight) {
-                        d3.select(this).remove();
-                    } else {
-                        var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)";
-                        d3.select(this).classed("visible", false).transition().attr("transform", transform).duration(800).remove();
-                    }
-                });
-
-                var transform = "translate("+ parent.dagre.x+","+ parent.dagre.y+") scale(0.1)";
-                DAG.newnodetransition(function(d) {
-                    if (DAG.animate()) {
-                        d3.select(this).attr("transform", transform).transition().duration(800).attr("transform", DAG.nodeTranslate);
-                    } else {
-                        d3.select(this).attr("transform", transform).attr("transform", DAG.nodeTranslate);
-                    }
-                });
-
-                dag.draw();
-
-                graphSVG.classed("hovering", false);
-                var nodes = graphSVG.selectAll(".node");
-                var edges = graphSVG.selectAll(".edge");
-                edges.classed("hovered", false).classed("immediate", false);
-                nodes.classed("hovered", false).classed("immediate", false);
-            });
+            }).on("toggleChildren", toggleChildren );
     }
 
     // Detaches any bound context menus
