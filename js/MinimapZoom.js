@@ -53,7 +53,6 @@ function MinimapZoom() {
         if (type!="zoom") { return zoom; }
         if (_==null) { return cb; }
         cb = _;
-        console.log("returning", zoom);
         return zoom;
     }
     
