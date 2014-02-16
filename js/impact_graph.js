@@ -33,6 +33,8 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     var DAGMinimap = DirectedAcyclicGraphMinimap(DAG).width("19.5%").height("19.5%").x("80%").y("80%");
     var DAGTooltip = DirectedAcyclicGraphTooltip();
     var nodeContextMenu = ImpactNodeContextMenu();
+    var contextMenu = ImpactContextMenu(dag);
+    contextMenu.call(rootSVG.node(), rootSVG.select(".graph-attach"));
 
     // Update function
     var update = function(data){
