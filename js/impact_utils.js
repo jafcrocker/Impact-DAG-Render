@@ -36,9 +36,54 @@ var createGraphFromImpacts = function(impact_doc, params) {
     console.info("Creating graph nodes");
     var nodes = {};
     var impact_nodes = impact_doc["nodes"];
-    for (var name in impact_nodes) {
-        nodes[name] = new Node(name);
-        nodes[name].impact_node = impact_nodes[name];
+    for (var id in impact_nodes) {
+        nodes[id] = new Node(id);
+        nodes[id].impact_node = impact_nodes[id];
+    }
+
+    // Second link the nodes together
+    console.info("Linking graph nodes");
+    var edges = impact_doc["edges"];
+    for (var i in edges) {
+        edge = edges[i];
+        var toNode = nodes[edge["to"]];
+        var fromNode=nodes[edge["from"]];
+        toNode.addChild(fromNode);
+        fromNode.addParent(toNode);
+    }
+
+    // Create the graph and add the nodes
+    var graph = new Graph();
+    for (var id in nodes) {
+        graph.addNode(nodes[id]);
+    }
+
+    console.log("Done creating graph from reports");
+    return graph;
+}
+
+var updateGraphFromImpacts = function(impact_doc, graph) {
+    console.log("Updating graph from impacts");
+    console.log(graph);
+
+    // Create nodes
+    console.info("Creating graph nodes");
+    var nodes = {};
+    var impact_nodes = impact_doc["nodes"];
+    for (var id in impact_nodes) {
+        nodes[id] = new Node(id);
+        nodes[id].impact_node = impact_nodes[id];
+
+        // copy data from the old node so nodes change visually
+        var oldNode = graph.getNode(id);
+        if (oldNode != null){
+            console.log(oldNode);
+            nodes[id].hidden = oldNode.hidden;
+            nodes[id].hidingDescendants = oldNode.hidingDescendants;
+            nodes[id].dagre_id = oldNode.dagre_id;
+            nodes[id].dagre = oldNode.dagre;
+            nodes[id].dagre_prev = oldNode.dagre_prev;
+        }
     }
 
     // Second link the nodes together

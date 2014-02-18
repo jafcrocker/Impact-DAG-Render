@@ -38,7 +38,7 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
 
     // Update function
     var update = function(data){
-        graph = createGraphFromImpacts(data, params);
+        graph = updateGraphFromImpacts(data, graph);
         this.draw();
     }
 

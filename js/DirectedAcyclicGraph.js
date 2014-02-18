@@ -7,7 +7,7 @@ function DirectedAcyclicGraph() {
      * Main rendering function
      */
     function graph(selection) {
-        selection.each(function(data) {   
+        selection.each(function(data) {
             // Select the g element that we draw to, or add it if it doesn't exist
             var svg = d3.select(this).selectAll("svg").data([data]);
             svg.enter().append("svg").append("g").attr("class", "graph").classed("animate", animate);
@@ -23,6 +23,7 @@ function DirectedAcyclicGraph() {
             // Get the existing nodes and edges, and recalculate the node size
             var existing_edges = svg.select(".graph").selectAll(".edge").data(edges, edgeid);
             var existing_nodes = svg.select(".graph").selectAll(".node").data(nodes, nodeid);
+            console.log(existing_nodes);
 
             // Capture the "preexisting" nodes before adding enter nodes to existing nodes
             existing_nodes.classed("pre-existing", true);
@@ -214,7 +215,7 @@ function DirectedAcyclicGraph() {
     
     graph.edgeTween = function(d) {
         var d1 = graph.splineGenerator.call(this, d);
-        var path0 = this, path1 = path0.cloneNode();                           
+        var path0 = this, path1 = path0.cloneNode();
         var n0 = path0.getTotalLength(), n1 = (path1.setAttribute("d", d1), path1).getTotalLength();
 
         // Uniform sampling of distance based on specified precision.
@@ -230,9 +231,10 @@ function DirectedAcyclicGraph() {
         });
 
         var line = d3.svg.line().interpolate("basis");
-        
+
         return function(t) {
-            return line(points.map(function(p) { return p(t); }));
+            var myLine = line(points.map(function(p) { return p(t); }));
+            return myLine;
         };
     }
     
