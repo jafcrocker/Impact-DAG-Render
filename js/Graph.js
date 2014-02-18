@@ -2,6 +2,13 @@
  * This file contains the prototypes for Graph and Node
  */
 
+var Edge = function(source, target) {
+    this.id = source.id + target.id;
+
+    this.source = source;
+    this.target = target;
+}
+
 var Node = function(id) {
     // Save the arguments
     this.id = id;
@@ -9,8 +16,8 @@ var Node = function(id) {
     // Default values for internal variables
     this.never_visible        = false;
     this.hidden               = false;
-    this.child_nodes          = {}; // The immediate child nodes in the graph, regardless of visibility
-    this.parent_nodes         = {}; // The immediate parent nodes in the graph, regardless of visibility
+    this.source_edges         = {}; // edges for which this node is a source
+    this.target_edges         = {}; // edges for which this node is a target
 }
 
 Node.prototype.visible = function(_) {
@@ -20,83 +27,17 @@ Node.prototype.visible = function(_) {
 }
 
 Node.prototype.addChild = function(child) {
-    this.child_nodes[child.id] = child;
-}
-
-Node.prototype.addParent = function(parent) {
-    this.parent_nodes[parent.id] = parent;
-}
-
-Node.prototype.removeChild = function(child) {
-    if (child.id in this.child_nodes) delete this.child_nodes[child.id];
-}
-
-Node.prototype.removeParent = function(parent) {
-    if (parent.id in this.parent_nodes) delete this.parent_nodes[parent.id];
+    var edge = new Edge(this, child);
+    this.source_edges[child.id] = edge;
+    child.target_edges[this.id] = edge;
 }
 
 Node.prototype.getParents = function() {
-    return values(this.parent_nodes);
+    return values(this.target_edges).map(function (d) { return d.source})
 }
 
 Node.prototype.getChildren = function() {
-    return values(this.child_nodes);
-}
-
-Node.prototype.getVisibleParents = function() {   
-    var visible_parent_map = {};
-    
-    var explore_node = function(node) {
-        if (visible_parent_map[node.id]) {
-            return;
-        }
-        visible_parent_map[node.id] = {};
-        var parents = node.parent_nodes;
-        for (var pid in parents) {
-            var parent = parents[pid];
-            if (parent.visible()) {
-                visible_parent_map[node.id][pid] = parent;
-            } else {
-                explore_node(parent);
-                var grandparents = visible_parent_map[pid];
-                for (var gpid in grandparents) {
-                    visible_parent_map[node.id][gpid] = grandparents[gpid];
-                }
-            }
-        }
-    }
-    
-    explore_node(this);
-    
-    return values(visible_parent_map[this.id]);
-}
-
-Node.prototype.getVisibleChildren = function() {
-    var visible_children_map = {};
-    
-    var explore_node = function(node) {
-        if (visible_children_map[node.id]) {
-            return;
-        }
-        visible_children_map[node.id] = {};
-        var children = node.child_nodes;
-        for (var pid in children) {
-            var child = children[pid];
-            if (child.visible()) {
-                visible_children_map[node.id][pid] = child;
-            } else {
-                explore_node(child);
-                var grandchildren = visible_children_map[pid];
-                for (var gcid in grandchildren) {
-                    visible_children_map[node.id][gcid] = grandchildren[gcid];
-                }
-            }
-        }
-    }
-    
-    explore_node(this);
-    
-    return values(visible_children_map[this.id]);
+    return values(this.source_edges).map(function(d) { return d.target})
 }
 
 var Graph = function() {
@@ -123,41 +64,14 @@ Graph.prototype.getVisibleNodes = function() {
 }
 
 Graph.prototype.getVisibleLinks = function() {
-    var visible_parent_map = {};
-    
-    var explore_node = function(node) {
-        if (visible_parent_map[node.id]) {
-            return;
-        }
-        visible_parent_map[node.id] = {};
-        var parents = node.parent_nodes;
-        for (var pid in parents) {
-            var parent = parents[pid];
-            if (parent.visible()) {
-                visible_parent_map[node.id][pid] = true;
-            } else {
-                explore_node(parent);
-                var grandparents = visible_parent_map[pid];
-                for (var gpid in grandparents) {
-                    visible_parent_map[node.id][gpid] = true;
-                }
-            }
-        }
-    }
-    
-    for (var i = 0; i < this.nodelist.length; i++) {
-        explore_node(this.nodelist[i]);
-    }
-    
-    var nodes = this.nodes;
     var ret = [];
     var visible_nodes = this.getVisibleNodes();
     for (var i = 0; i < visible_nodes.length; i++) {
         var node = visible_nodes[i];
-        var parentids = visible_parent_map[node.id];
-        Object.keys(parentids).forEach(function(pid) {
-            ret.push({source: nodes[pid], target: node});
-        })
+        values(node.target_edges).forEach(function(edge) {
+            if (edge.source.visible())
+                ret.push(edge);
+        });
     }
 
     return ret;
@@ -169,78 +83,39 @@ Graph.prototype.getVisibleLinks = function() {
 
 function getEntirePathLinks(center) {
     // Returns a list containing all edges leading into or from the center node
-    var visible_parent_map = {};
-    var visible_child_map = {};
-    var nodes = {};
-    
+    var edges = [];
+
+    var foundParent = {};
     var explore_parents = function(node) {
-        if (visible_parent_map[node.id]) {
-            return;
-        }
-        visible_parent_map[node.id] = {};
-        nodes[node.id] = node;
-        var parents = node.parent_nodes;
-        for (var pid in parents) {
-            var parent = parents[pid];
-            if (parent.visible()) {
-                visible_parent_map[node.id][pid] = true;
-                explore_parents(parent);
-            } else {
-                explore_parents(parent);
-                var grandparents = visible_parent_map[pid];
-                for (var gpid in grandparents) {
-                    visible_parent_map[node.id][gpid] = true;
-                }
+        if (foundParent[node.id]) return;
+        foundParent[node.id] = true;
+        values(node.target_edges).forEach(function(edge) {
+            if (edge.source.visible())
+            {
+                edges.push(edge);
+                explore_parents(edge.source);
             }
-        }
+        });
     }
-    
+
+    var foundChild = {};
     var explore_children = function(node) {
-        if (visible_child_map[node.id]) {
-            return;
-        }
-        visible_child_map[node.id] = {};
-        nodes[node.id] = node;
-        var children = node.child_nodes;
-        for (var cid in children) {
-            var child = children[cid];
-            if (child.visible()) {
-                visible_child_map[node.id][cid] = true;
-                explore_children(child);
-            } else {
-                explore_children(child);
-                var grandchildren = visible_child_map[cid];
-                for (var gcid in grandchildren) {
-                    visible_child_map[node.id][gcid] = true;
-                }
+        if (foundChild[node.id]) return;
+        foundChild[node.id] = true;
+        values(node.source_edges).forEach(function(edge) {
+            if (edge.target.visible())
+            {
+                edges.push(edge);
+                explore_children(edge.target);
             }
-        }
+        });
     }
     
     explore_parents(center);
     explore_children(center);
-    
-    var path = [];
 
-    for (var targetid in visible_parent_map) {
-        var target = nodes[targetid];
-        var sourceids = visible_parent_map[targetid];
-        for (var sourceid in sourceids) {
-            var source = nodes[sourceid];
-            path.push({source: source, target: target});
-        }
-    }
-    
-    for (var sourceid in visible_child_map) {
-        var source = nodes[sourceid];
-        var targetids = visible_child_map[sourceid];
-        for (var targetid in targetids) {
-            var target = nodes[targetid];
-            path.push({source: source, target: target});
-        }
-    }
 
-    return path;
+    return edges;
 }
 
 function values(obj) {
