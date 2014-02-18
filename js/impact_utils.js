@@ -77,7 +77,6 @@ var updateGraphFromImpacts = function(impact_doc, graph) {
         // copy data from the old node so nodes change visually
         var oldNode = graph.getNode(id);
         if (oldNode != null){
-            console.log(oldNode);
             nodes[id].hidden = oldNode.hidden;
             nodes[id].hidingDescendants = oldNode.hidingDescendants;
             nodes[id].dagre_id = oldNode.dagre_id;

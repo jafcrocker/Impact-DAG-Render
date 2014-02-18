@@ -94,7 +94,7 @@ function DirectedAcyclicGraph() {
     }
     var drawnode = function(d) {
         // Attach the DOM elements
-        d3.select(this).attr("state", d.impact_node.states.AVAILABILITY.state);
+        d3.select(this).attr("state", d.impact_node.states.AVAILABILITY.context_state);
 
         // Attach box
         d3.select(this).append("rect").attr("rx", 4);
@@ -106,6 +106,18 @@ function DirectedAcyclicGraph() {
         // Attach collapse marker if the node has hidden children
         if(d.hidingDescendants){
             d3.select(this).append("line").attr("class", "collapse");
+        }
+
+        // Attach marker for policies
+        if(d.impact_node.states.AVAILABILITY.global_policy){
+            d3.select(this).append("rect").attr("rx", 2).attr("class", "policy");
+            d3.select(this).append("text").attr("font-size", 8).text("Global");
+        }
+
+        // Attach marker for policies
+        if(d.impact_node.states.AVAILABILITY.context_policy){
+            d3.select(this).append("rect").attr("rx", 2).attr("class", "policy");
+            d3.select(this).append("text").attr("font-size", 8).text("Context");
         }
 
         var prior_pos = nodepos.call(this, d);
@@ -122,14 +134,20 @@ function DirectedAcyclicGraph() {
         // Because of SVG weirdness, call sizenode as necessary to ensure a node's size is correct
         var node_bbox = {"height": 60, "width": 85};
         var rect = d3.select(this).select('rect');
-        var line = d3.select(this).select('line');
+        var policyMarker = d3.select(this).select('.policy');
+        var policyMarkerText = d3.select(this).select('text');
         var collapseMarker = d3.select(this).select(".collapse");
         var text = d3.select(this).select(".nodeRep");
 
         rect.attr("x", -node_bbox.width/2).attr("y", -node_bbox.height/2)
         rect.attr("width", node_bbox.width).attr("height", node_bbox.height);
-        line.attr("x1", 0).attr("y1", node_bbox.height/2).attr("x2", -0).attr("y2", node_bbox.height/2 + 7);
         collapseMarker.attr("x1", -20).attr("y1", 45).attr("x2", 20).attr("y2", 45);
+
+        if(!policyMarker.empty()){
+            policyMarker.attr("x", -20).attr("y", node_bbox.height/2 - 5).attr("width", 40).attr("height", 10);
+            policyMarkerText.attr("x", -policyMarkerText.node().getBBox().width/2).attr("y", node_bbox.height/2 + 3);
+        }
+
         text.attr("x", -node_bbox.width/2).attr("y", -node_bbox.height/2);
         text.attr("width", node_bbox.width).attr("height", node_bbox.height);
     }

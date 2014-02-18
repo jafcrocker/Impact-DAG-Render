@@ -46,6 +46,11 @@
 
 .node{
     fill: #CCC;
+    stroke-width: 2px;
+}
+
+.node text{
+    fill: #000;
 }
 
 .node[state=DOWN] rect, .node[state=UNACCEPTABLE] rect{
@@ -57,6 +62,22 @@
 }
 
 .node[state=ATRISK] rect{
+    stroke: #FCD116;
+}
+
+.node .policy{
+    stroke: #000;
+}
+
+.node[state=DOWN] .policy, .node[state=UNACCEPTABLE] .policy{
+    stroke: #A4011B;
+}
+
+.node[state=DEGRADED] .policy{
+    stroke: #CF5300;
+}
+
+.node[state=ATRISK] .policy{
     stroke: #FCD116;
 }
 
