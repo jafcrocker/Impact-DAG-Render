@@ -7,7 +7,7 @@ function DirectedAcyclicGraph() {
      * Main rendering function
      */
     function graph(selection) {
-        selection.each(function(data) {   
+        selection.each(function(data) {
             // Select the g element that we draw to, or add it if it doesn't exist
             var svg = d3.select(this).selectAll("svg").data([data]);
             svg.enter().append("svg").append("g").attr("class", "graph").classed("animate", animate);
@@ -23,6 +23,7 @@ function DirectedAcyclicGraph() {
             // Get the existing nodes and edges, and recalculate the node size
             var existing_edges = svg.select(".graph").selectAll(".edge").data(edges, edgeid);
             var existing_nodes = svg.select(".graph").selectAll(".node").data(nodes, nodeid);
+            console.log(existing_nodes);
 
             // Capture the "preexisting" nodes before adding enter nodes to existing nodes
             existing_nodes.classed("pre-existing", true);
@@ -78,34 +79,17 @@ function DirectedAcyclicGraph() {
     var height = d3.functor("100%");
     var edgeid = function(d) { return d.source.id + d.target.id; }
     var nodeid = function(d) { return d.id; }
-    var nodeTemplate = "{name}";
-    var applyTemplate = function(d) {
-        var nodeRepresentation = graph.nodeTemplate();
-        for( var key in d.impact_node ){
-            nodeRepresentation = nodeRepresentation.replace("{" + key + "}", d.impact_node[key]);
-        }
-        return nodeRepresentation;
-    }
     var getnodes = function(d) { return d.getVisibleNodes(); }
     var getedges = function(d) { return d.getVisibleLinks(); }
     var bbox = function(d) {
         return d3.select(this).select("rect").node().getBBox();
     }
     var drawnode = function(d) {
-        // Attach the DOM elements
-        d3.select(this).attr("state", d.impact_node.states.AVAILABILITY.state);
-
         // Attach box
         d3.select(this).append("rect").attr("rx", 4);
 
-        // Attach HTML body
-        d3.select(this).append("foreignObject").attr("class", "nodeRep")
-            .append("xhtml:div").attr("class", "nodeRepresentation").html(applyTemplate(d));
-
-        // Attach collapse marker if the node has hidden children
-        if(d.hidingDescendants){
-            d3.select(this).append("line").attr("class", "collapse");
-        }
+        // Attach node text
+        d3.select(this).append("text").text(nodeid);
 
         var prior_pos = nodepos.call(this, d);
         if (prior_pos!=null) {
@@ -113,22 +97,26 @@ function DirectedAcyclicGraph() {
         }
     }
     var updatenode = function(d){
-        // Attach the DOM elements
-        d3.select(this).attr("state", d.impact_node.states.AVAILABILITY.state);
-        d3.select(this).select(".nodeRepresentation").html(applyTemplate(d));
+        drawnode(d);
     }
     var sizenode = function(d) {
         // Because of SVG weirdness, call sizenode as necessary to ensure a node's size is correct
         var node_bbox = {"height": 60, "width": 85};
         var rect = d3.select(this).select('rect');
-        var line = d3.select(this).select('line');
+        var policyMarker = d3.select(this).select('.policy rect');
+        var policyMarkerText = d3.select(this).select('.policy text');
         var collapseMarker = d3.select(this).select(".collapse");
         var text = d3.select(this).select(".nodeRep");
 
         rect.attr("x", -node_bbox.width/2).attr("y", -node_bbox.height/2)
         rect.attr("width", node_bbox.width).attr("height", node_bbox.height);
-        line.attr("x1", 0).attr("y1", node_bbox.height/2).attr("x2", -0).attr("y2", node_bbox.height/2 + 7);
         collapseMarker.attr("x1", -20).attr("y1", 45).attr("x2", 20).attr("y2", 45);
+
+        if(!policyMarker.empty()){
+            policyMarker.attr("x", -20).attr("y", node_bbox.height/2 - 5).attr("width", 40).attr("height", 10);
+            policyMarkerText.attr("x", -policyMarkerText.node().getBBox().width/2).attr("y", node_bbox.height/2 + 3);
+        }
+
         text.attr("x", -node_bbox.width/2).attr("y", -node_bbox.height/2);
         text.attr("width", node_bbox.width).attr("height", node_bbox.height);
     }
@@ -262,7 +250,8 @@ function DirectedAcyclicGraph() {
         var line = d3.svg.line().interpolate("basis");
 
         return function(t) {
-            return line(points.map(function(p) { return p(t); }));
+            var myLine = line(points.map(function(p) { return p(t); }));
+            return myLine;
         };
     }
     

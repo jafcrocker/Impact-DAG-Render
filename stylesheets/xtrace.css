@@ -105,9 +105,8 @@
 
 .graph.animate .edge.visible.entering {
 	transition: fill 0.5s, stroke 0.5s, stroke-width 0.5s, opacity 1.5s;
-	transition-delay: 0, 0, 0, 0.5s;
-	-webkit-transition: fill 0.5s, stroke 0.5s, stroke-width 0.5s, opacity
-		1.5s;
+	transition-delay: 0.8s;
+    -webkit-transition: fill 0.5s, stroke 0.5s, stroke-width 0.5s, opacity 1.5s;
 	-webkit-transition-delay: 0, 0, 0, 0.5s;
 }
 
