@@ -206,52 +206,16 @@ function DirectedAcyclicGraph() {
     }
 
     graph.edgeTween = function(d) {
-        var d1 = graph.splineGenerator.call(this, d);
-        var path0 = this, path1 = path0.cloneNode();
-        path1.setAttribute("d", d1);
-
-        var splineGenerator = function(d) {
-            return d3.svg.line().x(function(d) { return d.x })
-                .y(function(d) { return d.y})
-                .interpolate("basis");
-        }
-        var points1 = d.dagre.points;
-        var points0 = d.dagre_prev ? d.dagre_prev.points : d.dagre.points;
-
-        function parametricTween(path0, path1) {
-            var n0 = path0.getTotalLength(), n1 = path1.getTotalLength();
-            // Uniform sampling of distance based on specified precision.
-            var distances = [0], i = 0, dt = Math.max(1/8, 4 / Math.max(n0, n1));
-            while ((i += dt) < 1) distances.push(i);
-            distances.push(1);
-
-            // Compute point-interpolators at each distance.
-            var points = distances.map(function(t) {
-                var p0 = path0.getPointAtLength(t * n0),
-                    p1 = path1.getPointAtLength(t * n1);
-                return d3.interpolate([p0.x, p0.y], [p1.x, p1.y]);
-            });
-            return points;
-        }
-        function pointwiseTween(points0, points1) {
-            var points = d3.range(points0.length).map(function(i){
-                var p0 = points0[i];
-                var p1 = points1[i];
-                return d3.interpolate([p0.x, p0.y], [p1.x, p1.y]);
-            });
-            return points;
-        }
-
-        var points;
-        if (points0.length == points1.length)
-            points = pointwiseTween(points0, points1);
-        else
-            points = parametricTween(path0, path1);
+        var src = d.dagre_prev ? d.dagre_prev.points : d.dagre.points;
+        var dst = d.dagre.points;
+        var points = d3.range(Math.max(src.length, dst.length)).map(function(i){
+            var p0 = src[Math.min(src.length-1, i)];
+            var p1 = dst[Math.min(dst.length-1, i)];
+            return d3.interpolate([p0.x, p0.y], [p1.x, p1.y]);
+        });
         var line = d3.svg.line().interpolate("basis");
-
         return function(t) {
-            var myLine = line(points.map(function(p) { return p(t); }));
-            return myLine;
+            return line(points.map(function(p) { return p(t); }));
         };
     }
     
