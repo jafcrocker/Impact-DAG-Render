@@ -45,7 +45,6 @@ window.onload = function() {
 		window.data = data;
         var graph = new ImpactDAG(document.body, data, params);
 
-		//JAFC3 window.xtrace = new XTraceDAG(document.body, data[0].reports, params);
         window.impact = graph;
         setTimeout(refresh, 5000);
 	};
@@ -56,7 +55,6 @@ window.onload = function() {
 	if (id==null) {
 	    document.body.appendChild(document.createTextNode("No Trace ID specified"));
     } else {
-        //JAFC3 getReports(id, callback, errback);
         getImpactServices(id, callback, errback);
     }
 }
