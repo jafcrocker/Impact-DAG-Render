@@ -241,34 +241,15 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
             path.forEach(function(p) {
                 pathnodes[p.source.id] = true;
                 pathnodes[p.target.id] = true;
-                pathlinks[p.source.id+p.target.id] = true;
+                pathlinks[p.id] = true;
             });
 
             edges.classed("hovered", function(d) {
-                return pathlinks[d.source.id+d.target.id];
+                return pathlinks[d.id];
             })
             nodes.classed("hovered", function(d) {
                 return pathnodes[d.id];
             });
-
-            var immediatenodes = {};
-            var immediatelinks = {};
-            immediatenodes[center.id] = true;
-            center.getVisibleParents().forEach(function(p) {
-                immediatenodes[p.id] = true;
-                immediatelinks[p.id+center.id] = true;
-            })
-            center.getVisibleChildren().forEach(function(p) {
-                immediatenodes[p.id] = true;
-                immediatelinks[center.id+p.id] = true;
-            })
-
-//            edges.classed("immediate", function(d) {
-//                return immediatelinks[d.source.id+d.target.id];
-//            })
-//            nodes.classed("immediate", function(d) {
-//                return immediatenodes[d.id];
-//            })
         }
     }
 

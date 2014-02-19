@@ -49,7 +49,6 @@ var createGraphFromImpacts = function(impact_doc, params) {
         var toNode = nodes[edge["to"]];
         var fromNode=nodes[edge["from"]];
         toNode.addChild(fromNode);
-        fromNode.addParent(toNode);
     }
 
     // Create the graph and add the nodes
@@ -88,7 +87,6 @@ var updateGraphFromImpacts = function(impact_doc, graph) {
         var toNode = nodes[edge["to"]];
         var fromNode=nodes[edge["from"]];
         toNode.addChild(fromNode);
-        fromNode.addParent(toNode);
     }
 
     // Create the graph and add the nodes
