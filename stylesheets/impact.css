@@ -65,23 +65,23 @@
     stroke: #FCD116;
 }
 
-.node .policy{
+.node .policy rect{
     stroke: #000;
 }
 
-.node[state=DOWN] .policy, .node[state=UNACCEPTABLE] .policy{
+.node[state=DOWN] .policy rect, .node[state=UNACCEPTABLE] .policy rect{
     stroke: #A4011B;
 }
 
-.node[state=DEGRADED] .policy{
+.node[state=DEGRADED] .policy rect{
     stroke: #CF5300;
 }
 
-.node[state=ATRISK] .policy{
+.node[state=ATRISK] .policy rect{
     stroke: #FCD116;
 }
 
-.node[state=UP] .state{
+.node .state{
     background-position: right;
 }
 
@@ -90,11 +90,11 @@
 }
 
 .node[state=DEGRADED] .state{
-    background-position: -31;
+    background-position: -31px;
 }
 
 .node[state=ATRISK] .state{
-    background-position: -61;
+    background-position: -61px;
 }
 
 .node line{
@@ -103,7 +103,7 @@
 }
 
 .node line.collapse{
-    stroke: blue;
+    stroke: #333399;
     stroke-width: 5px;
     stroke-dasharray: 5,10;
 }

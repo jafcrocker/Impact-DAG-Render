@@ -7,8 +7,28 @@
  */
 function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
     var dag = this;
+    var aspect = "AVAILABILITY";
+    var nodeTemplate = "{name}";
+
+    // Setter for the node template
+    dag.nodeTemplate = function(_) { if (!arguments.length) return nodeTemplate; nodeTemplate = _; return this; }
+
     // Get the necessary parameters
     var lightweight = params.lightweight ? true : false;
+
+    // Attach the aspect menu
+    var aspectMenu = d3.select(attachPoint)
+        .append("div").attr("class", "aspectMenu").html("View:&nbsp;");
+    aspectMenu.append("button").html("Availability").on("click", function(){
+        aspect = "AVAILABILITY";
+        d3.selectAll(".policy").remove();
+        dag.draw();
+    });
+    aspectMenu.append("button").html("Performance").on("click", function(){
+        aspect = "PERFORMANCE";
+        d3.selectAll(".policy").remove();
+        dag.draw();
+    });
 
     var rootSVG = d3.select(attachPoint).append("svg").attr("class", "graph-viewport");
 
@@ -28,7 +48,6 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         });
         return edges;
     });
-    params.nodeTemplate ? DAG.nodeTemplate(params.nodeTemplate) : null;
 
     var DAGMinimap = DirectedAcyclicGraphMinimap(DAG).width("19.5%").height("19.5%").x("80%").y("80%");
     var DAGTooltip = DirectedAcyclicGraphTooltip();
@@ -70,6 +89,72 @@ function ImpactDAG(attachPoint, impact_doc, /*optional*/ params) {
         zoom.translate([tx, ty]).scale(scale);
         refreshViewport();
     }
+
+    params.nodeTemplate ? dag.nodeTemplate(params.nodeTemplate) : null;
+
+    var applyTemplate = function(d) {
+        var nodeRepresentation = dag.nodeTemplate();
+        for( var key in d.impact_node ){
+            nodeRepresentation = nodeRepresentation.replace("{" + key + "}", d.impact_node[key]);
+        }
+        return nodeRepresentation;
+    }
+
+    DAG.updatenode(function(d){
+        // Attach the DOM elements
+        d3.select(this).attr("state", d.impact_node.states[aspect].context_state);
+        d3.select(this).select(".nodeRepresentation").html(applyTemplate(d));
+
+        // Attach/Detach marker for policies
+        if(d.impact_node.states[aspect].global_policy){
+            var policyRep = d3.select(this).append("g").attr("class", "policy");
+            policyRep.append("rect").attr("rx", 2);
+            policyRep.append("text").attr("font-size", 8).text("Global");
+        }
+
+        // Attach marker for policies
+        if(d.impact_node.states[aspect].context_policy){
+            var policyRep = d3.select(this).append("g").attr("class", "policy");
+            policyRep.append("rect").attr("rx", 2).attr("class", "policy");
+            policyRep.append("text").attr("font-size", 8).text("Context");
+        }
+    });
+
+    DAG.drawnode(function(d) {
+        // Attach the DOM elements
+        d3.select(this).attr("state", d.impact_node.states[aspect].context_state);
+
+        // Attach box
+        d3.select(this).append("rect").attr("rx", 4);
+
+        // Attach HTML body
+        d3.select(this).append("foreignObject").attr("class", "nodeRep")
+            .append("xhtml:div").attr("class", "nodeRepresentation").html(applyTemplate(d));
+
+        // Attach collapse marker if the node has hidden children
+        if(d.hidingDescendants){
+            d3.select(this).append("line").attr("class", "collapse");
+        }
+
+        // Attach/Detach marker for policies
+        if(d.impact_node.states[aspect].global_policy){
+            var policyRep = d3.select(this).append("g").attr("class", "policy");
+            policyRep.append("rect").attr("rx", 2);
+            policyRep.append("text").attr("font-size", 8).text("Global");
+        }
+
+        // Attach marker for policies
+        if(d.impact_node.states[aspect].context_policy){
+            var policyRep = d3.select(this).append("g").attr("class", "policy");
+            policyRep.append("rect").attr("rx", 2).attr("class", "policy");
+            policyRep.append("text").attr("font-size", 8).text("Context");
+        }
+
+        var prior_pos = d.dagre;
+        if (prior_pos!=null) {
+            d3.select(this).attr("transform", graph.nodeTranslate);
+        }
+    });
 
     function toggleChildren(d) {
         var parent = d;

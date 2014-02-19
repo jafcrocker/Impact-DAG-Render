@@ -79,46 +79,17 @@ function DirectedAcyclicGraph() {
     var height = d3.functor("100%");
     var edgeid = function(d) { return d.source.id + d.target.id; }
     var nodeid = function(d) { return d.id; }
-    var nodeTemplate = "{name}";
-    var applyTemplate = function(d) {
-        var nodeRepresentation = graph.nodeTemplate();
-        for( var key in d.impact_node ){
-            nodeRepresentation = nodeRepresentation.replace("{" + key + "}", d.impact_node[key]);
-        }
-        return nodeRepresentation;
-    }
     var getnodes = function(d) { return d.getVisibleNodes(); }
     var getedges = function(d) { return d.getVisibleLinks(); }
     var bbox = function(d) {
         return d3.select(this).select("rect").node().getBBox();
     }
     var drawnode = function(d) {
-        // Attach the DOM elements
-        d3.select(this).attr("state", d.impact_node.states.AVAILABILITY.context_state);
-
         // Attach box
         d3.select(this).append("rect").attr("rx", 4);
 
-        // Attach HTML body
-        d3.select(this).append("foreignObject").attr("class", "nodeRep")
-            .append("xhtml:div").attr("class", "nodeRepresentation").html(applyTemplate(d));
-
-        // Attach collapse marker if the node has hidden children
-        if(d.hidingDescendants){
-            d3.select(this).append("line").attr("class", "collapse");
-        }
-
-        // Attach marker for policies
-        if(d.impact_node.states.AVAILABILITY.global_policy){
-            d3.select(this).append("rect").attr("rx", 2).attr("class", "policy");
-            d3.select(this).append("text").attr("font-size", 8).text("Global");
-        }
-
-        // Attach marker for policies
-        if(d.impact_node.states.AVAILABILITY.context_policy){
-            d3.select(this).append("rect").attr("rx", 2).attr("class", "policy");
-            d3.select(this).append("text").attr("font-size", 8).text("Context");
-        }
+        // Attach node text
+        d3.select(this).append("text").text(nodeid);
 
         var prior_pos = nodepos.call(this, d);
         if (prior_pos!=null) {
@@ -126,16 +97,14 @@ function DirectedAcyclicGraph() {
         }
     }
     var updatenode = function(d){
-        // Attach the DOM elements
-        d3.select(this).attr("state", d.impact_node.states.AVAILABILITY.state);
-        d3.select(this).select(".nodeRepresentation").html(applyTemplate(d));
+        drawnode(d);
     }
     var sizenode = function(d) {
         // Because of SVG weirdness, call sizenode as necessary to ensure a node's size is correct
         var node_bbox = {"height": 60, "width": 85};
         var rect = d3.select(this).select('rect');
-        var policyMarker = d3.select(this).select('.policy');
-        var policyMarkerText = d3.select(this).select('text');
+        var policyMarker = d3.select(this).select('.policy rect');
+        var policyMarkerText = d3.select(this).select('.policy text');
         var collapseMarker = d3.select(this).select(".collapse");
         var text = d3.select(this).select(".nodeRep");
 
