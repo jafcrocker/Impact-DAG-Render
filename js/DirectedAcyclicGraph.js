@@ -23,7 +23,6 @@ function DirectedAcyclicGraph() {
             // Get the existing nodes and edges, and recalculate the node size
             var existing_edges = svg.select(".graph").selectAll(".edge").data(edges, edgeid);
             var existing_nodes = svg.select(".graph").selectAll(".node").data(nodes, nodeid);
-            console.log(existing_nodes);
 
             // Capture the "preexisting" nodes before adding enter nodes to existing nodes
             existing_nodes.classed("pre-existing", true);

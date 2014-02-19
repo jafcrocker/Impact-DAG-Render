@@ -63,11 +63,7 @@ var createGraphFromImpacts = function(impact_doc, params) {
 }
 
 var updateGraphFromImpacts = function(impact_doc, graph) {
-    console.log("Updating graph from impacts");
-    console.log(graph);
-
     // Create nodes
-    console.info("Creating graph nodes");
     var nodes = {};
     var impact_nodes = impact_doc["nodes"];
     for (var id in impact_nodes) {
@@ -86,7 +82,6 @@ var updateGraphFromImpacts = function(impact_doc, graph) {
     }
 
     // Second link the nodes together
-    console.info("Linking graph nodes");
     var edges = impact_doc["edges"];
     for (var i in edges) {
         edge = edges[i];
@@ -102,7 +97,6 @@ var updateGraphFromImpacts = function(impact_doc, graph) {
         graph.addNode(nodes[id]);
     }
 
-    console.log("Done creating graph from reports");
     return graph;
 }
 
