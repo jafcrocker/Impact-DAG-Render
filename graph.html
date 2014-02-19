@@ -33,7 +33,7 @@ window.onload = function() {
         var graph = new ImpactDAG(document.body, data, params);
 
         window.impact = graph;
-        //setTimeout(refresh, 5000);
+        setTimeout(refresh, 5000);
 	};
 	var errback = function(message, error) {
 		console.log("Error retrieving reports", error);
